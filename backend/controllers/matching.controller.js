@@ -6,8 +6,18 @@ const getMatches = (req, res) => {
 
     lostItems.forEach(lost => {
         foundItems.forEach(found => {
-            if (lost.name.toLowerCase() === found.name.toLowerCase()) {
-                matches.push({ lost, found });
+            if (
+                lost.name.toLowerCase() === found.name.toLowerCase() &&
+                lost.location.toLowerCase() === found.location.toLowerCase()
+            ) {
+                matches.push({
+                    lostId: lost.id,
+                    foundId: found.id,
+                    name: lost.name,
+                    location: lost.location,
+                    lostDate: lost.date,
+                    foundDate: found.date
+                });
             }
         });
     });
@@ -15,6 +25,4 @@ const getMatches = (req, res) => {
     res.json(matches);
 };
 
-module.exports = {
-    getMatches,
-};
+module.exports = { getMatches };
