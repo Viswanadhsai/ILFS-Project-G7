@@ -1,7 +1,10 @@
-const lostItems = require("../scripts/lost.script");
-const foundItems = require("../scripts/found.script");
+const { readLostItems } = require("../scripts/lost.script.js");
+const { readFoundItems } = require("../scripts/found.script.js");
 
 const getMatches = (req, res) => {
+    const lostItems = readLostItems();
+    const foundItems = readFoundItems();
+
     const matches = [];
 
     lostItems.forEach(lost => {
