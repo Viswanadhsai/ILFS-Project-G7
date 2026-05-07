@@ -7,8 +7,9 @@ const getAllFoundItems = (req, res) => {
 const createFoundItem = (req, res) => {
     const item = req.body;
 
-    if (!item.name || !item.location) {
-        return res.status(400).json({ message: "name and location required" });
+    // Input validation
+    if (!item.name || !item.location || !item.date) {
+        return res.status(400).json({ message: "name, location and date required" });
     }
 
     item.id = foundItems.length + 1;
