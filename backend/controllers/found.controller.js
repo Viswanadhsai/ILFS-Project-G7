@@ -5,9 +5,10 @@ const getAllFoundItems = (req, res) => {
 };
 
 const createFoundItem = (req, res) => {
+    console.log("POST /api/found", req.body);
+
     const item = req.body;
 
-    // Input validation
     if (!item.name || !item.location || !item.date) {
         return res.status(400).json({ message: "name, location and date required" });
     }

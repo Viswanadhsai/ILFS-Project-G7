@@ -5,9 +5,10 @@ const getAllLostItems = (req, res) => {
 };
 
 const createLostItem = (req, res) => {
+    console.log("POST /api/lost", req.body);
+
     const item = req.body;
 
-    // Input validation
     if (!item.name || !item.location || !item.date) {
         return res.status(400).json({ message: "name, location and date required" });
     }
