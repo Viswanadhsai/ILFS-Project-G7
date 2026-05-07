@@ -181,3 +181,40 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 720px) {
   .hero h1 { font-size: 42px; }
 }
+
+/* ===== SIGN-UP SECTION ===== */
+.signup-section {
+  background: var(--cream-bg);
+  text-align: center;
+  padding: 60px 20px 50px;
+}
+
+.signup-section .quote {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 18px;
+  margin-bottom: 24px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signup-section .actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary { background: var(--espresso); color: var(--cream); }
+.btn-primary:hover { background: var(--espresso-2); }
+
+.btn-ghost-dark {
+  background: transparent;
+  color: var(--espresso);
+  border-color: var(--espresso);
+}
+.btn-ghost-dark:hover { background: var(--espresso); color: var(--cream); }
+
+.btn-lg { padding: 14px 32px; font-size: 14px; }
