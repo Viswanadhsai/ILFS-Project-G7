@@ -14,6 +14,12 @@ app.get("/", (req, res) => {
     res.json({ message: "ILFS backend running" });
 });
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Backend Error:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT);
