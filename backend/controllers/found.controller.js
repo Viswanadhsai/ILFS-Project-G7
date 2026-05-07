@@ -1,7 +1,8 @@
-const foundItems = require("../scripts/found.script");
+const { readFoundItems, writeFoundItems } = require("../scripts/found.script");
 
 const getAllFoundItems = (req, res) => {
-    res.json(foundItems);
+    const items = readFoundItems();
+    res.json(items);
 };
 
 const createFoundItem = (req, res) => {
@@ -13,8 +14,11 @@ const createFoundItem = (req, res) => {
         return res.status(400).json({ message: "name, location and date required" });
     }
 
-    item.id = foundItems.length + 1;
-    foundItems.push(item);
+    const items = readFoundItems();
+    item.id = items.length + 1;
+
+    items.push(item);
+    writeFoundItems(items);
 
     res.status(201).json(item);
 };

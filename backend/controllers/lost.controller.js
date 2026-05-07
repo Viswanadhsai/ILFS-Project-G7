@@ -1,7 +1,8 @@
-const lostItems = require("../scripts/lost.script");
+const { readLostItems, writeLostItems } = require("../scripts/lost.script");
 
 const getAllLostItems = (req, res) => {
-    res.json(lostItems);
+    const items = readLostItems();
+    res.json(items);
 };
 
 const createLostItem = (req, res) => {
@@ -13,8 +14,11 @@ const createLostItem = (req, res) => {
         return res.status(400).json({ message: "name, location and date required" });
     }
 
-    item.id = lostItems.length + 1;
-    lostItems.push(item);
+    const items = readLostItems();
+    item.id = items.length + 1;
+
+    items.push(item);
+    writeLostItems(items);
 
     res.status(201).json(item);
 };
