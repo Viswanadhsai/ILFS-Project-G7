@@ -1,11 +1,11 @@
 const { readLostItems, writeLostItems } = require("../scripts/lost.script");
 
-const getAllLostItems = (req, res) => {
+const getLostItems = (req, res) => {
     const items = readLostItems();
     res.json(items);
 };
 
-const createLostItem = (req, res) => {
+const addLostItem = (req, res) => {
     console.log("POST /api/lost", req.body);
 
     const item = req.body;
@@ -24,6 +24,6 @@ const createLostItem = (req, res) => {
 };
 
 module.exports = {
-    getAllLostItems,
-    createLostItem,
+    getLostItems,
+    addLostItem,
 };

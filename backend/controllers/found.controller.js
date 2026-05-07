@@ -1,11 +1,11 @@
 const { readFoundItems, writeFoundItems } = require("../scripts/found.script");
 
-const getAllFoundItems = (req, res) => {
+const getFoundItems = (req, res) => {
     const items = readFoundItems();
     res.json(items);
 };
 
-const createFoundItem = (req, res) => {
+const addFoundItem = (req, res) => {
     console.log("POST /api/found", req.body);
 
     const item = req.body;
@@ -24,6 +24,6 @@ const createFoundItem = (req, res) => {
 };
 
 module.exports = {
-    getAllFoundItems,
-    createFoundItem,
+    getFoundItems,
+    addFoundItem,
 };
