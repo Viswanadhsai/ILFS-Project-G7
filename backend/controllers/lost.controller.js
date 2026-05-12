@@ -31,7 +31,29 @@ const addLostItem = (req, res, next) => {
     }
 };
 
+const updateLostItem = (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const items = readLostItems();
+
+        const index = items.findIndex(item => item.id === id);
+        if (index === -1) {
+            return res.status(404).json({ message: "Lost item not found" });
+        }
+
+        const updated = { ...items[index], ...req.body };
+        items[index] = updated;
+
+        writeLostItems(items);
+
+        res.json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     getLostItems,
     addLostItem,
+    updateLostItem
 };

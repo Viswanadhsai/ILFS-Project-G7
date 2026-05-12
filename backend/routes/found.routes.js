@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { addFoundItem, getFoundItems } = require("../controllers/found.controller");
-const { validateFoundInput } = require("../middleware/validation.middleware");
+
+const {
+    getFoundItems,
+    addFoundItem,
+    updateFoundItem
+} = require("../controllers/found.controller");
 
 router.get("/", getFoundItems);
-router.post("/", validateFoundInput, addFoundItem);
+router.post("/", addFoundItem);
+router.put("/:id", updateFoundItem);
 
 module.exports = router;

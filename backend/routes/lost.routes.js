@@ -1,10 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { getLostItems, addLostItem } = require("../controllers/lost.controller");
-const { validateLostInput } = require("../middleware/validation.middleware");
+const {
+    getLostItems,
+    addLostItem,
+    updateLostItem
+} = require("../controllers/lost.controller");
 
 router.get("/", getLostItems);
-router.post("/", validateLostInput, addLostItem);
+router.post("/", addLostItem);
+router.put("/:id", updateLostItem);
 
 module.exports = router;

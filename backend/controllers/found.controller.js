@@ -31,7 +31,29 @@ const addFoundItem = (req, res, next) => {
     }
 };
 
+const updateFoundItem = (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        const items = readFoundItems();
+
+        const index = items.findIndex(item => item.id === id);
+        if (index === -1) {
+            return res.status(404).json({ message: "Found item not found" });
+        }
+
+        const updated = { ...items[index], ...req.body };
+        items[index] = updated;
+
+        writeFoundItems(items);
+
+        res.json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     getFoundItems,
     addFoundItem,
+    updateFoundItem
 };
