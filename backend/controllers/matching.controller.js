@@ -1,35 +1,38 @@
-const { readLostItems } = require("../scripts/lost.script.js");
-const { readFoundItems } = require("../scripts/found.script.js");
+const LostItem = require("../models/lost.model");
+const FoundItem = require("../models/found.model");
 
-const getMatches = (req, res, next) => {
+const matchItems = async (req, res, next) => {
     try {
-        const lostItems = readLostItems();
-        const foundItems = readFoundItems();
+        // Fetch all lost + found items
+        const lostItems = await LostItem.find();
+        const foundItems = await FoundItem.find();
 
         const matches = [];
 
+        // Simple matching logic: name + category
         lostItems.forEach(lost => {
             foundItems.forEach(found => {
                 if (
                     lost.name.toLowerCase() === found.name.toLowerCase() &&
-                    lost.location.toLowerCase() === found.location.toLowerCase()
+                    lost.category.toLowerCase() === found.category.toLowerCase()
                 ) {
                     matches.push({
-                        lostId: lost.id,
-                        foundId: found.id,
-                        name: lost.name,
-                        location: lost.location,
-                        lostDate: lost.date,
-                        foundDate: found.date
+                        lostItem: lost,
+                        foundItem: found,
+                        score: 2 // simple scoring system
                     });
                 }
             });
         });
 
-        res.json(matches);
+        res.json({
+            totalMatches: matches.length,
+            matches
+        });
+
     } catch (err) {
         next(err);
     }
 };
 
-module.exports = { getMatches };
+module.exports = { matchItems };

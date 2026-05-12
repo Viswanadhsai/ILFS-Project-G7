@@ -1,52 +1,58 @@
-const { readLostItems, writeLostItems } = require("../scripts/lost.script");
+const LostItem = require("../models/lost.model");
 
-const getLostItems = (req, res, next) => {
+const getLostItems = async (req, res, next) => {
     try {
-        const items = readLostItems();
+        const items = await LostItem.find();
         res.json(items);
     } catch (err) {
         next(err);
     }
 };
 
-const addLostItem = (req, res, next) => {
+const addLostItem = async (req, res, next) => {
     try {
-        console.log("POST /api/lost", req.body);
-
         const item = req.body;
 
-        if (!item.name || !item.location || !item.date) {
-            return res.status(400).json({ message: "name, location and date required" });
+        if (!item.name || !item.location || !item.category || !item.date) {
+            return res.status(400).json({
+                message: "name, location, category and date required"
+            });
         }
 
-        const items = readLostItems();
-        item.id = items.length + 1;
-
-        items.push(item);
-        writeLostItems(items);
-
-        res.status(201).json(item);
+        const created = await LostItem.create(item);
+        res.status(201).json(created);
     } catch (err) {
         next(err);
     }
 };
 
-const updateLostItem = (req, res, next) => {
+const updateLostItem = async (req, res, next) => {
     try {
-        const id = parseInt(req.params.id);
-        const items = readLostItems();
+        const updated = await LostItem.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
 
-        const index = items.findIndex(item => item.id === id);
-        if (index === -1) {
+        if (!updated) {
             return res.status(404).json({ message: "Lost item not found" });
         }
 
-        const updated = { ...items[index], ...req.body };
-        items[index] = updated;
-
-        writeLostItems(items);
-
         res.json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const deleteLostItem = async (req, res, next) => {
+    try {
+        const deleted = await LostItem.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Lost item not found" });
+        }
+
+        res.json({ message: "Lost item deleted successfully" });
     } catch (err) {
         next(err);
     }
@@ -55,5 +61,6 @@ const updateLostItem = (req, res, next) => {
 module.exports = {
     getLostItems,
     addLostItem,
-    updateLostItem
+    updateLostItem,
+    deleteLostItem
 };
