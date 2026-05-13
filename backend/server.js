@@ -18,6 +18,8 @@ mongoose.connect(process.env.MONGO_URI)
 app.use("/api/lost", require("./routes/lost.routes"));
 app.use("/api/found", require("./routes/found.routes"));
 app.use("/api/matching", require("./routes/matching.routes"));
+app.use("/api/auth", require("./routes/auth.routes"));
+
 
 // Root route
 app.get("/", (req, res) => {
