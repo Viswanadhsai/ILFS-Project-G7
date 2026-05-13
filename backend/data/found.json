@@ -1,14 +1,16 @@
 [
   {
-    "name": "Wallet",
-    "location": "Library",
-    "date": "2024-05-02",
+    "name": "Watch",
+    "location": "Car Park",
+    "date": "2026-05-13",
+    "category": "Accessories",
     "id": 1
   },
   {
-    "name": "Mobile Phone",
-    "location": "Bus Stop",
-    "date": "2026-05-13",
+    "name": "Ear Ring",
+    "location": "Car Park",
+    "date": "2026-05-12",
+    "category": "Accessories",
     "id": 2
   }
 ]

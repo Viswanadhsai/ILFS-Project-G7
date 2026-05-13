@@ -1,26 +1,37 @@
 [
   {
-    "name": "Wallet",
-    "location": "Library",
-    "date": "2024-05-01",
+    "name": "Laptop",
+    "location": "Cafeteria",
+    "date": "2026-05-11",
+    "category": "Electronics",
     "id": 1
   },
   {
-    "name": "Black Backpack",
-    "location": "Library",
-    "date": "2026-05-13",
+    "name": "Sports Water Bottle",
+    "location": "library",
+    "date": "2026-05-10",
+    "category": "Gym ",
     "id": 2
   },
   {
-    "name": "Diamond Ring",
-    "location": "Car park",
-    "date": "2026-05-10",
+    "name": "Bagpack",
+    "location": "Library",
+    "date": "2026-05-13",
+    "category": "bags ",
     "id": 3
   },
   {
-    "name": "Mobile Phone",
-    "location": "Bus Stop",
+    "name": "Wallet",
+    "location": "Car Park",
     "date": "2026-05-12",
+    "category": "Bags",
     "id": 4
+  },
+  {
+    "name": "Watch",
+    "location": "Car Park",
+    "date": "2026-05-13",
+    "category": "Accessories",
+    "id": 5
   }
 ]

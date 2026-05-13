@@ -1,7 +1,35 @@
 const { readFoundItems, writeFoundItems } = require("../scripts/found.script");
 
 const getFoundItems = (req, res) => {
-    const items = readFoundItems();
+    let items = readFoundItems();
+
+    const { location, name, date, category } = req.query;
+
+    // If location filter is provided
+    if (location) {
+        items = items.filter(i => 
+            i.location?.toLowerCase().includes(location.toLowerCase())
+        );
+    }
+
+    // If name filter is provided
+    if (name) {
+        items = items.filter(i => 
+            i.name?.toLowerCase().includes(name.toLowerCase())
+        );
+    }
+
+    // If date filter is provided
+    if (date) {
+        items = items.filter(i => i.date === date);
+    }
+    
+    //If category filter is provided
+      if (category) {
+        items = items.filter(i => 
+            i.category?.toLowerCase().includes(category.toLowerCase())
+        );
+    }
     res.json(items);
 };
 

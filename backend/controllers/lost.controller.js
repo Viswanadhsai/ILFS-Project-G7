@@ -1,7 +1,32 @@
 const { readLostItems, writeLostItems } = require("../scripts/lost.script");
 
 const getLostItems = (req, res) => {
-    const items = readLostItems();
+    let items = readLostItems();
+
+    const { location, name, date, category } = req.query;
+
+    if (location) {
+        items = items.filter(i => 
+            i.location?.toLowerCase().includes(location.toLowerCase())
+        );
+    }
+
+    if (name) {
+        items = items.filter(i => 
+            i.name?.toLowerCase().includes(name.toLowerCase())
+        );
+    }
+
+    if (date) {
+        items = items.filter(i => i.date === date);
+    }
+
+    if (category) {
+        items = items.filter(i => 
+            i.category?.toLowerCase().includes(category.toLowerCase())
+        );
+    }
+
     res.json(items);
 };
 

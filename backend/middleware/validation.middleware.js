@@ -6,28 +6,30 @@ const isValidDate = (date) => {
 };
 
 const validateLostInput = (req, res, next) => {
-    const { name, location, date } = req.body;
+    const { name, location, date, category } = req.body;
 
     if (
         !name || typeof name !== "string" ||
         !location || typeof location !== "string" ||
-        !date || !isValidDate(date)
+        !date || !isValidDate(date) ||
+        !category || typeof category !== "string"
     ) {
-        return res.status(400).json({ error: "Invalid lost item input" });
+        return res.status(400).json({ error: "Invalid lost item input. name, location, date and category are required" });
     }
 
     next();
 };
 
 const validateFoundInput = (req, res, next) => {
-    const { name, location, date } = req.body;
+    const { name, location, date, category } = req.body;
 
     if (
         !name || typeof name !== "string" ||
         !location || typeof location !== "string" ||
-        !date || !isValidDate(date)
+        !date || !isValidDate(date) ||
+        !category || typeof category !== "string"
     ) {
-        return res.status(400).json({ error: "Invalid found item input" });
+        return res.status(400).json({ error: "Invalid found item input. name, location, date and category are required" });
     }
 
     next();
