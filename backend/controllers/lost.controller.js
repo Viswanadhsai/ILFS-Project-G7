@@ -3,8 +3,8 @@ const { readLostItems, writeLostItems } = require("../scripts/lost.script");
 const getLostItems = (req, res) => {
     let items = readLostItems();
 
-    const { location, name, date, category } = req.query;
-
+    const { location, name, date, category,sort} = req.query;
+//filtering lost items based on query parameters
     if (location) {
         items = items.filter(i => 
             i.location?.toLowerCase().includes(location.toLowerCase())
@@ -24,6 +24,30 @@ const getLostItems = (req, res) => {
     if (category) {
         items = items.filter(i => 
             i.category?.toLowerCase().includes(category.toLowerCase())
+        );
+    }
+//sorting lost items by date,name,category and location (ascending order)
+if (sort === "date") {
+        items = items.sort((a, b) => 
+            new Date(a.date) - new Date(b.date)
+        );
+    }
+
+    if (sort === "name") {
+        items = items.sort((a, b) => 
+            a.name?.localeCompare(b.name)
+        );
+    }
+
+    if (sort === "category") {
+        items = items.sort((a, b) => 
+            a.category?.localeCompare(b.category)
+        );
+    }
+
+    if (sort === "location") {
+        items = items.sort((a, b) => 
+            a.location?.localeCompare(b.location)
         );
     }
 

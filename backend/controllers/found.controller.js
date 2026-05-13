@@ -3,35 +3,59 @@ const { readFoundItems, writeFoundItems } = require("../scripts/found.script");
 const getFoundItems = (req, res) => {
     let items = readFoundItems();
 
-    const { location, name, date, category } = req.query;
+    const { location, name, date, category, sort } = req.query;
 
-    // If location filter is provided
+    // Filtering
     if (location) {
         items = items.filter(i => 
             i.location?.toLowerCase().includes(location.toLowerCase())
         );
     }
 
-    // If name filter is provided
     if (name) {
         items = items.filter(i => 
             i.name?.toLowerCase().includes(name.toLowerCase())
         );
     }
 
-    // If date filter is provided
     if (date) {
         items = items.filter(i => i.date === date);
     }
-    
-    //If category filter is provided
-      if (category) {
+
+    if (category) {
         items = items.filter(i => 
             i.category?.toLowerCase().includes(category.toLowerCase())
         );
     }
+
+    // Sorting
+    if (sort === "date") {
+        items = items.sort((a, b) => 
+            new Date(a.date) - new Date(b.date)
+        );
+    }
+
+    if (sort === "name") {
+        items = items.sort((a, b) => 
+            a.name?.localeCompare(b.name)
+        );
+    }
+
+    if (sort === "category") {
+        items = items.sort((a, b) => 
+            a.category?.localeCompare(b.category)
+        );
+    }
+
+    if (sort === "location") {
+        items = items.sort((a, b) => 
+            a.location?.localeCompare(b.location)
+        );
+    }
+
     res.json(items);
 };
+
 
 const addFoundItem = (req, res) => {
     console.log("POST /api/found", req.body);
