@@ -1,5 +1,6 @@
 const FoundItem = require("../models/found.model");
 
+// GET all found items
 const getFoundItems = async (req, res, next) => {
     try {
         const items = await FoundItem.find();
@@ -9,6 +10,7 @@ const getFoundItems = async (req, res, next) => {
     }
 };
 
+// ADD found item
 const addFoundItem = async (req, res, next) => {
     try {
         const item = req.body;
@@ -26,6 +28,7 @@ const addFoundItem = async (req, res, next) => {
     }
 };
 
+// UPDATE found item
 const updateFoundItem = async (req, res, next) => {
     try {
         const updated = await FoundItem.findByIdAndUpdate(
@@ -44,6 +47,7 @@ const updateFoundItem = async (req, res, next) => {
     }
 };
 
+// DELETE found item
 const deleteFoundItem = async (req, res, next) => {
     try {
         const deleted = await FoundItem.findByIdAndDelete(req.params.id);
@@ -58,76 +62,61 @@ const deleteFoundItem = async (req, res, next) => {
     }
 };
 
-//code to get found items by id , date and item.
-// Get found item by ID
-const getFoundItemById = (req, res) => {
-    const items = readFoundItems();
-    
-    const item = items.find(i => i.id === parseInt(req.params.id));
-    
-    if (!item) {
-        return res.status(404).json({ message: "Item not found" });
+// GET found item by ID
+const getFoundItemById = async (req, res, next) => {
+    try {
+        const item = await FoundItem.findById(req.params.id);
+
+        if (!item) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
+        res.json(item);
+    } catch (err) {
+        next(err);
     }
-    
-    res.json(item);
 };
 
-// Get found items by date
-const getFoundItemsByDate = (req, res) => {
-    const items = readFoundItems();
-    
-    const filtered = items.filter(i => i.date === req.params.date);
-    
-    if (filtered.length === 0) {
-        return res.status(404).json({ message: "No items found for this date" });
+// GET found items by date
+const getFoundItemsByDate = async (req, res, next) => {
+    try {
+        const items = await FoundItem.find({ date: req.params.date });
+
+        if (items.length === 0) {
+            return res.status(404).json({ message: "No items found for this date" });
+        }
+
+        res.json(items);
+    } catch (err) {
+        next(err);
     }
-    
-    res.json(filtered);
 };
 
-// Get found items by name
-const getFoundItemsByName = (req, res) => {
-    const items = readFoundItems();
-    
-    const name = req.query.name?.toLowerCase();
-    
-    const filtered = items.filter(i => 
-        i.name?.toLowerCase().includes(name)
-    );
-    
-    if (filtered.length === 0) {
-        return res.status(404).json({ message: "No items found with this name" });
-    }
-    
-    res.json(filtered);
-};
+// GET found items by name
+const getFoundItemsByName = async (req, res, next) => {
+    try {
+        const name = req.query.name?.toLowerCase();
 
-// Update found item by ID
-const updateFoundItem = (req, res) => {
-    const items = readFoundItems();
-    
-    const index = items.findIndex(i => i.id === parseInt(req.params.id));
-    
-    if (index === -1) {
-        return res.status(404).json({ message: "Item not found" });
+        const items = await FoundItem.find({
+            name: { $regex: name, $options: "i" }
+        });
+
+        if (items.length === 0) {
+            return res.status(404).json({ message: "No items found with this name" });
+        }
+
+        res.json(items);
+    } catch (err) {
+        next(err);
     }
-    
-    items[index] = { ...items[index], ...req.body };
-    
-    writeFoundItems(items);
-    res.json(items[index]);
 };
 
 module.exports = {
     getFoundItems,
     addFoundItem,
-<<<<<<< HEAD
     updateFoundItem,
-    deleteFoundItem
-=======
+    deleteFoundItem,
     getFoundItemById,
     getFoundItemsByDate,
-    getFoundItemsByName,
-    updateFoundItem,
->>>>>>> main
+    getFoundItemsByName
 };
