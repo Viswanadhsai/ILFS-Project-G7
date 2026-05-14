@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -16,16 +16,19 @@ connectDB();
 app.use("/api/lost", require("./routes/lost.routes"));
 app.use("/api/found", require("./routes/found.routes"));
 app.use("/api/matching", require("./routes/matching.routes"));
+app.use("/api/users", require("./routes/user.routes"));
 
 // Root route
 app.get("/", (req, res) => {
     res.json({ message: "ILFS backend running" });
 });
 
-// Global Error Handler
+// Error handler
 app.use((err, req, res, next) => {
-    console.error("Backend Error:", err.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Backend Error:", err);
+    res.status(err.status || 500).json({
+        message: err.message || "Internal Server Error"
+    });
 });
 
 // Start server
