@@ -1,25 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
+const validate = require("../middleware/validation.middleware");
+const { lostItemSchema } = require("../validation/lost.validation");
+
 const {
     getLostItems,
     addLostItem,
     updateLostItem,
     deleteLostItem,
-    getLostItemsByName,
-    getLostItemsByDate,
     getLostItemById
 } = require("../controllers/lost.controller");
 
-// Original routes
 router.get("/", getLostItems);
-router.post("/", addLostItem);
-router.put("/:id", updateLostItem);
-router.delete("/:id", deleteLostItem);
+router.get("/:id", getLostItemById);
 
-// Additional routes
-router.get("/search", getLostItemsByName);        // GET /api/lost/search?name=bag
-router.get("/date/:date", getLostItemsByDate);    // GET /api/lost/date/2026-05-13
-router.get("/:id", getLostItemById);              // GET /api/lost/3
+router.post("/", validate(lostItemSchema), addLostItem);
+router.put("/:id", validate(lostItemSchema), updateLostItem);
+
+router.delete("/:id", deleteLostItem);
 
 module.exports = router;
