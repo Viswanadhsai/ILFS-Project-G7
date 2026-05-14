@@ -1,6 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
+<<<<<<< HEAD
+const {
+    getLostItems,
+    addLostItem,
+    updateLostItem,
+    deleteLostItem
+} = require("../controllers/lost.controller");
+=======
 const { 
     getLostItems, 
     addLostItem,
@@ -10,10 +18,13 @@ const {
     updateLostItem
 } = require("../controllers/lost.controller");
 const { validateLostInput } = require("../middleware/validation.middleware");
+>>>>>>> main
 
 // Original routes
 router.get("/", getLostItems);
-router.post("/", validateLostInput, addLostItem);
+router.post("/", addLostItem);
+router.put("/:id", updateLostItem);
+router.delete("/:id", deleteLostItem);
 
 // Your new routes
 router.get("/search", getLostItemsByName);        // GET /api/lost/search?name=bag

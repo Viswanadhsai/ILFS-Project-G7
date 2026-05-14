@@ -1,26 +1,61 @@
-const { readLostItems, writeLostItems } = require("../scripts/lost.script");
+const LostItem = require("../models/lost.model");
 
-const getLostItems = (req, res) => {
-    const items = readLostItems();
-    res.json(items);
+const getLostItems = async (req, res, next) => {
+    try {
+        const items = await LostItem.find();
+        res.json(items);
+    } catch (err) {
+        next(err);
+    }
 };
 
-const addLostItem = (req, res) => {
-    console.log("POST /api/lost", req.body);
+const addLostItem = async (req, res, next) => {
+    try {
+        const item = req.body;
 
-    const item = req.body;
+        if (!item.name || !item.location || !item.category || !item.date) {
+            return res.status(400).json({
+                message: "name, location, category and date required"
+            });
+        }
 
-    if (!item.name || !item.location || !item.date) {
-        return res.status(400).json({ message: "name, location and date required" });
+        const created = await LostItem.create(item);
+        res.status(201).json(created);
+    } catch (err) {
+        next(err);
     }
+};
 
-    const items = readLostItems();
-    item.id = items.length + 1;
+const updateLostItem = async (req, res, next) => {
+    try {
+        const updated = await LostItem.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
 
-    items.push(item);
-    writeLostItems(items);
+        if (!updated) {
+            return res.status(404).json({ message: "Lost item not found" });
+        }
 
-    res.status(201).json(item);
+        res.json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const deleteLostItem = async (req, res, next) => {
+    try {
+        const deleted = await LostItem.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Lost item not found" });
+        }
+
+        res.json({ message: "Lost item deleted successfully" });
+    } catch (err) {
+        next(err);
+    }
 };
 
 //code to get lost items by id , date and item.
@@ -92,9 +127,14 @@ const updateLostItem = (req, res) => {
 module.exports = {
     getLostItems,
     addLostItem,
+<<<<<<< HEAD
+    updateLostItem,
+    deleteLostItem
+=======
     getLostItemById,
     getLostItemsByDate,
     getLostItemsByName,
     updateLostItem
+>>>>>>> main
 };
 

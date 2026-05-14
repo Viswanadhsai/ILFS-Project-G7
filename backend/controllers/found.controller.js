@@ -1,26 +1,61 @@
-const { readFoundItems, writeFoundItems } = require("../scripts/found.script");
+const FoundItem = require("../models/found.model");
 
-const getFoundItems = (req, res) => {
-    const items = readFoundItems();
-    res.json(items);
+const getFoundItems = async (req, res, next) => {
+    try {
+        const items = await FoundItem.find();
+        res.json(items);
+    } catch (err) {
+        next(err);
+    }
 };
 
-const addFoundItem = (req, res) => {
-    console.log("POST /api/found", req.body);
+const addFoundItem = async (req, res, next) => {
+    try {
+        const item = req.body;
 
-    const item = req.body;
+        if (!item.name || !item.location || !item.category || !item.date) {
+            return res.status(400).json({
+                message: "name, location, category and date required"
+            });
+        }
 
-    if (!item.name || !item.location || !item.date) {
-        return res.status(400).json({ message: "name, location and date required" });
+        const created = await FoundItem.create(item);
+        res.status(201).json(created);
+    } catch (err) {
+        next(err);
     }
+};
 
-    const items = readFoundItems();
-    item.id = items.length + 1;
+const updateFoundItem = async (req, res, next) => {
+    try {
+        const updated = await FoundItem.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
 
-    items.push(item);
-    writeFoundItems(items);
+        if (!updated) {
+            return res.status(404).json({ message: "Found item not found" });
+        }
 
-    res.status(201).json(item);
+        res.json(updated);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const deleteFoundItem = async (req, res, next) => {
+    try {
+        const deleted = await FoundItem.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Found item not found" });
+        }
+
+        res.json({ message: "Found item deleted successfully" });
+    } catch (err) {
+        next(err);
+    }
 };
 
 //code to get found items by id , date and item.
@@ -86,8 +121,13 @@ const updateFoundItem = (req, res) => {
 module.exports = {
     getFoundItems,
     addFoundItem,
+<<<<<<< HEAD
+    updateFoundItem,
+    deleteFoundItem
+=======
     getFoundItemById,
     getFoundItemsByDate,
     getFoundItemsByName,
     updateFoundItem,
+>>>>>>> main
 };
