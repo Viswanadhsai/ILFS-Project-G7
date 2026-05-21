@@ -1,4 +1,5 @@
 const LOCAL_LOST_ITEMS_KEY = "lostItems";
+const LOCAL_FOUND_ITEMS_KEY = "foundItems";
 
 const demoLostItems = [
   {
@@ -52,6 +53,11 @@ function getLostItems() {
   return [...localItems, ...demoLostItems];
 }
 
+function getFoundItems() {
+  const localItems = JSON.parse(localStorage.getItem(LOCAL_FOUND_ITEMS_KEY) || "[]");
+  return [...localItems, ...demoFoundItems];
+}
+
 function itemMatchesSearch(item, searchTerm) {
   const searchableText = [
     item.title,
@@ -62,6 +68,118 @@ function itemMatchesSearch(item, searchTerm) {
   ].join(" ").toLowerCase();
 
   return searchableText.includes(searchTerm);
+}
+
+function normaliseWords(value) {
+  const stopWords = ["a", "an", "and", "at", "in", "near", "of", "on", "the", "to", "with"];
+
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter(word => word.length > 2 && !stopWords.includes(word));
+}
+
+function getItemWords(item) {
+  return normaliseWords([
+    item.title,
+    item.category,
+    item.location,
+    item.description
+  ].join(" "));
+}
+
+function countSharedWords(firstWords, secondWords) {
+  const secondWordSet = new Set(secondWords);
+  return new Set(firstWords.filter(word => secondWordSet.has(word))).size;
+}
+
+function getDaysBetween(firstDate, secondDate) {
+  if (!firstDate || !secondDate) return null;
+
+  const firstTime = new Date(firstDate).getTime();
+  const secondTime = new Date(secondDate).getTime();
+
+  if (Number.isNaN(firstTime) || Number.isNaN(secondTime)) return null;
+
+  return Math.round((secondTime - firstTime) / (1000 * 60 * 60 * 24));
+}
+
+function scorePotentialMatch(lostItem, foundItem) {
+  let score = 0;
+  const reasons = [];
+
+  if (lostItem.category && lostItem.category === foundItem.category) {
+    score += 35;
+    reasons.push("same category");
+  }
+
+  const sharedWords = countSharedWords(getItemWords(lostItem), getItemWords(foundItem));
+  if (sharedWords > 0) {
+    score += Math.min(sharedWords * 12, 36);
+    reasons.push(`${sharedWords} shared keyword${sharedWords === 1 ? "" : "s"}`);
+  }
+
+  const sharedLocationWords = countSharedWords(normaliseWords(lostItem.location), normaliseWords(foundItem.location));
+  if (sharedLocationWords > 0) {
+    score += 18;
+    reasons.push("similar location");
+  }
+
+  const dayGap = getDaysBetween(lostItem.dateLost, foundItem.dateFound);
+  if (dayGap !== null && dayGap >= 0 && dayGap <= 14) {
+    score += 11;
+    reasons.push("date range fits");
+  } else if (dayGap !== null && dayGap < 0) {
+    score -= 20;
+  }
+
+  return {
+    lostItem,
+    foundItem,
+    score: Math.max(0, Math.min(score, 100)),
+    reasons
+  };
+}
+
+function getPotentialMatches(lostItems, foundItems) {
+  return lostItems
+    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)))
+    .filter(match => match.score >= 45)
+    .sort((first, second) => second.score - first.score)
+    .slice(0, 4);
+}
+
+function createMatchCard(match) {
+  const reasonText = match.reasons.length ? match.reasons.join(", ") : "possible text match";
+
+  return `
+    <div class="match-card">
+      <span class="match-score">${match.score}% match</span>
+      <h6><b>${escapeHtml(match.lostItem.title)}</b> may match <b>${escapeHtml(match.foundItem.title)}</b></h6>
+      <p class="grey-text text-darken-1">${escapeHtml(reasonText)}</p>
+      <p><b>Lost near:</b> ${escapeHtml(match.lostItem.location)}</p>
+      <p><b>Found near:</b> ${escapeHtml(match.foundItem.location)}</p>
+    </div>
+  `;
+}
+
+function renderPotentialMatches(lostItems, foundItems) {
+  const matches = getPotentialMatches(lostItems, foundItems);
+  const list = document.getElementById("potentialMatchesList");
+  const emptyState = document.getElementById("matchesEmptyState");
+  const count = document.getElementById("potentialMatchCount");
+
+  count.textContent = matches.length;
+
+  if (!matches.length) {
+    list.innerHTML = "";
+    emptyState.classList.remove("hide");
+    return;
+  }
+
+  emptyState.classList.add("hide");
+  list.innerHTML = matches.map(createMatchCard).join("");
 }
 
 function createItemCard(item, dateLabel, dateValue) {
@@ -100,9 +218,12 @@ function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
 
 function renderItems() {
   const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
-  const lostItems = getLostItems().filter(item => itemMatchesSearch(item, searchTerm));
-  const foundItems = demoFoundItems.filter(item => itemMatchesSearch(item, searchTerm));
+  const allLostItems = getLostItems();
+  const allFoundItems = getFoundItems();
+  const lostItems = allLostItems.filter(item => itemMatchesSearch(item, searchTerm));
+  const foundItems = allFoundItems.filter(item => itemMatchesSearch(item, searchTerm));
 
+  renderPotentialMatches(allLostItems, allFoundItems);
   renderItemGroup(lostItems, "lostItemsList", "lostEmptyState", "lostCount", "Date lost", "dateLost");
   renderItemGroup(foundItems, "foundItemsList", "foundEmptyState", "foundCount", "Date found", "dateFound");
 }
