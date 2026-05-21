@@ -29,6 +29,11 @@
             <i class="material-icons">account_circle</i>
           </a>
         </li>
+        <li>
+          <a href="admin.html" class="tooltipped" data-tooltip="Admin dashboard">
+            <i class="material-icons">admin_panel_settings</i>
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -39,9 +44,14 @@
         <h4 class="teal-text"><b>Lost & Found Main Page</b></h4>
         <p class="grey-text text-darken-1">Search, report, and track items around campus.</p>
       </div>
-      <a href="report-lost.html" class="btn teal waves-effect waves-light">
-        Report Item
-      </a>
+      <div class="main-actions">
+        <a href="report-lost.html" class="btn teal waves-effect waves-light">
+          Report Lost
+        </a>
+        <a href="report-found.html" class="btn teal lighten-1 waves-effect waves-light">
+          Report Found
+        </a>
+      </div>
     </section>
 
     <section class="search-section">
@@ -75,6 +85,20 @@
         <div class="chat-input-row">
           <input type="text" id="chatInput" placeholder="Type a message" />
           <button class="btn teal" onclick="sendChatMessage()">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block match-panel">
+      <div class="section-heading">
+        <h5><b>Potential Matches</b></h5>
+        <span class="badge teal white-text" id="potentialMatchCount">0</span>
+      </div>
+      <div class="match-list" id="potentialMatchesList"></div>
+      <div class="empty-state card z-depth-1 hide" id="matchesEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No potential matches found</b></h6>
+          <p class="grey-text">Likely matches will appear when lost and found reports share similar details.</p>
         </div>
       </div>
     </section>
