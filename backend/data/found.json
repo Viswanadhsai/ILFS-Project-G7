@@ -6,7 +6,6 @@
     "id": 1
   },
   {
-<<<<<<< HEAD
     "name": "Wallet",
     "description": "Black leather wallet found near escalator",
     "location": "Melbourne Central",
@@ -71,11 +70,5 @@
     "location": "Tram Stop",
     "date": "2025-05-09",
     "id": 11
-=======
-    "name": "Mobile Phone",
-    "location": "Bus Stop",
-    "date": "2026-05-13",
-    "id": 2
->>>>>>> main
   }
 ]
