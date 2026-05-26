@@ -12,13 +12,14 @@ const {
 } = require("../controllers/found.controller");
 
 const { validateFoundInput } = require("../middleware/validation.middleware");
+const { protect } = require("../middleware/auth.middleware");
 
 router.get("/", getFoundItems);
-router.post("/", addFoundItem);
+router.post("/", protect, addFoundItem);
 router.get("/search", getFoundItemsByName);
 router.get("/date/:date", getFoundItemsByDate);
 router.get("/:id", getFoundItemById);
-router.put("/:id", updateFoundItem);
-router.delete("/:id", deleteFoundItem);
+router.put("/:id", protect, updateFoundItem);
+router.delete("/:id", protect, deleteFoundItem);
 
 module.exports = router;
