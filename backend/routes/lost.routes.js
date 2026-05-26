@@ -1,35 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-<<<<<<< HEAD
 const {
     getLostItems,
-    addLostItem,
-    updateLostItem,
-    deleteLostItem
-} = require("../controllers/lost.controller");
-=======
-const { 
-    getLostItems, 
     addLostItem,
     getLostItemById,
     getLostItemsByDate,
     getLostItemsByName,
-    updateLostItem
+    updateLostItem,
+    deleteLostItem
 } = require("../controllers/lost.controller");
+
 const { validateLostInput } = require("../middleware/validation.middleware");
->>>>>>> main
+const { protect } = require("../middleware/auth.middleware");
 
-// Original routes
 router.get("/", getLostItems);
-router.post("/", addLostItem);
-router.put("/:id", updateLostItem);
-router.delete("/:id", deleteLostItem);
-
-// Your new routes
-router.get("/search", getLostItemsByName);        // GET /api/lost/search?name=bag
-router.get("/date/:date", getLostItemsByDate);    // GET /api/lost/date/2026-05-13
-router.get("/:id", getLostItemById);              // GET /api/lost/3
-router.put("/:id", updateLostItem);               // PUT /api/lost/3
+router.post("/", protect, addLostItem);
+router.get("/search", getLostItemsByName);
+router.get("/date/:date", getLostItemsByDate);
+router.get("/:id", getLostItemById);
+router.put("/:id", protect, updateLostItem);
+router.delete("/:id", protect, deleteLostItem);
 
 module.exports = router;
