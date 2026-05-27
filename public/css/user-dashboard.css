@@ -1,7 +1,15 @@
 /* ============================================================
    TraceHub – User Dashboard CSS
-   Commit 2: all styles for layout, profile card, form cards,
-             items, matches, empty states
+   Commit 4: replace all hardcoded hex colours with tokens
+   Changes:
+     #fffdf4  → var(--cream-active)
+     #b91c1c  → var(--danger)
+     #fca5a5  → var(--danger-bg)
+     #fff0e0  → var(--status-lost-bg)
+     #7a3d00  → var(--status-lost-text)
+     #e6f4ea  → var(--status-found-bg)
+     #1a5c2e  → var(--status-found-text)
+     #fff     → var(--cream-card)
    ============================================================ */
 
 .nav-text-link {
@@ -95,7 +103,9 @@
 }
 .dash-qnav-btn:last-child { border-bottom: none; }
 .dash-qnav-btn:hover      { background: var(--cream-bg); color: var(--ink); }
-.dash-qnav-btn.active     { color: var(--ink); font-weight: 600; border-left: 3px solid var(--gold); background: #fffdf4; }
+
+/* CHANGED: was background: #fffdf4 */
+.dash-qnav-btn.active     { color: var(--ink); font-weight: 600; border-left: 3px solid var(--gold); background: var(--cream-active); }
 
 /* ===== CONTENT ===== */
 .dash-content { min-width: 0; }
@@ -169,7 +179,8 @@
 }
 .dash-eye-btn:hover { color: var(--ink); opacity: 1; }
 
-.dash-field-error { font-size: 11px; color: #b91c1c; margin-top: 4px; }
+/* CHANGED: was color: #b91c1c */
+.dash-field-error { font-size: 11px; color: var(--danger); margin-top: 4px; }
 
 /* Password strength */
 .pw-strength-wrap {
@@ -194,20 +205,27 @@
 .dash-save-msg { font-size: 13px; color: var(--gold-dark); font-style: italic; }
 
 /* Danger zone */
-.danger-card   { border-color: #fca5a5; }
-.danger-title  { color: #b91c1c; }
+/* CHANGED: was border-color: #fca5a5 */
+.danger-card   { border-color: var(--danger-bg); }
+/* CHANGED: was color: #b91c1c */
+.danger-title  { color: var(--danger); }
 .danger-row    { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.danger-label  { font-size: 14px; font-weight: 600; color: #b91c1c; margin-bottom: 3px; }
+/* CHANGED: was color: #b91c1c */
+.danger-label  { font-size: 14px; font-weight: 600; color: var(--danger); margin-bottom: 3px; }
 .danger-desc   { font-size: 13px; color: var(--ink-muted); }
 
 .btn-danger {
   padding: 9px 20px; border-radius: var(--radius-sm);
-  border: 1px solid #b91c1c; background: transparent;
+  /* CHANGED: was border: 1px solid #b91c1c */
+  border: 1px solid var(--danger); background: transparent;
   font-family: var(--sans); font-size: 12px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase; color: #b91c1c;
+  letter-spacing: 1px; text-transform: uppercase;
+  /* CHANGED: was color: #b91c1c */
+  color: var(--danger);
   cursor: pointer; transition: all .15s; white-space: nowrap;
 }
-.btn-danger:hover { background: #b91c1c; color: #fff; }
+/* CHANGED: was background: #b91c1c; color: #fff */
+.btn-danger:hover { background: var(--danger); color: var(--cream-card); }
 
 /* ===== ITEM CARDS ===== */
 .dash-items-list { display: flex; flex-direction: column; gap: 12px; }
@@ -230,8 +248,10 @@
   display: inline-block; padding: 4px 12px; border-radius: 999px;
   font-size: 11px; font-weight: 700; letter-spacing: .5px; flex-shrink: 0;
 }
-.status-lost     { background: #fff0e0; color: #7a3d00; }
-.status-found    { background: #e6f4ea; color: #1a5c2e; }
+/* CHANGED: was background: #fff0e0; color: #7a3d00 */
+.status-lost     { background: var(--status-lost-bg);  color: var(--status-lost-text); }
+/* CHANGED: was background: #e6f4ea; color: #1a5c2e */
+.status-found    { background: var(--status-found-bg); color: var(--status-found-text); }
 .status-matched  { background: var(--tan-gold); color: var(--espresso); }
 .status-returned { background: var(--espresso); color: var(--cream); }
 
