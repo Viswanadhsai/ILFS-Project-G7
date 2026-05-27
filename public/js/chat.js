@@ -111,6 +111,63 @@ function renderMessages(conv) {
   area.scrollTop = area.scrollHeight;
 }
 
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const text  = input.value.trim();
+  if (!text || !activeConvId) return;
+ 
+  const conv = conversations.find(c => c.id === activeConvId);
+  if (!conv) return;
+ 
+  const now  = new Date();
+  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+ 
+  conv.messages.push({ id: Date.now(), from: "me", text, time, date: "Today" });
+ 
+  input.value        = "";
+  input.style.height = "auto";
+ 
+  renderMessages(conv);
+  renderConvList();
+ 
+  setTimeout(() => simulateReply(conv), 1200 + Math.random() * 800);
+}
+ 
+function simulateReply(conv) {
+  const replies = [
+    "Got it, thanks for letting me know!",
+    "Sure, I can arrange that.",
+    "Let me check and get back to you.",
+    "That sounds good. When works for you?",
+    "I will be at the campus office from 9 AM tomorrow."
+  ];
+  const reply = replies[Math.floor(Math.random() * replies.length)];
+  const now   = new Date();
+  const time  = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+ 
+  conv.messages.push({ id: Date.now(), from: "them", text: reply, time, date: "Today" });
+ 
+  if (activeConvId === conv.id) {
+    renderMessages(conv);
+  } else {
+    conv.unread++;
+  }
+ 
+  renderConvList();
+}
+ 
+function handleKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+ 
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 120) + "px";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderConvList();
   if (conversations.length) openConversation(conversations[0].id);
