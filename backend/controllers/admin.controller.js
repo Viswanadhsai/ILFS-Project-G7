@@ -41,4 +41,54 @@ const getAllItems = async (req, res, next) => {
     }
 };
 
-module.exports = { getAllItems };
+// GET all matched items
+const getAllMatches = async (req, res, next) => {
+    try {
+        const lostItems = await LostItem.find();
+        const foundItems = await FoundItem.find();
+
+        const matches = [];
+
+        lostItems.forEach(lost => {
+            foundItems.forEach(found => {
+                let score = 0;
+
+                if (lost.category && found.category &&
+                    lost.category.toLowerCase() === found.category.toLowerCase()) {
+                    score += 3;
+                }
+
+                if (lost.name && found.name &&
+                    lost.name.toLowerCase() === found.name.toLowerCase()) {
+                    score += 3;
+                }
+
+                if (lost.location && found.location &&
+                    lost.location.toLowerCase() === found.location.toLowerCase()) {
+                    score += 2;
+                }
+
+                if (score >= 3) {
+                    matches.push({
+                        lostItem: lost,
+                        foundItem: found,
+                        score
+                    });
+                }
+            });
+        });
+
+        matches.sort((a, b) => b.score - a.score);
+
+        res.json({
+            success: true,
+            totalMatches: matches.length,
+            matches
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { getAllItems, getAllMatches };
