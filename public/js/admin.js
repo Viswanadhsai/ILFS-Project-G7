@@ -417,11 +417,28 @@ function resetDemoData() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const currentUser = (() => {
+    try { return JSON.parse(localStorage.getItem("user") || "null"); }
+    catch { return null; }
+  })();
+ 
+  if (!currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
+ 
+  if (currentUser.role !== "admin") {
+    window.location.href = "main.html";
+    return;
+  }
+  /* end auth guard */
+ 
   if (window.M) {
     M.FormSelect.init(document.querySelectorAll("select"));
     M.updateTextFields();
   }
-
+ 
   await loadBackendItems();
   renderAdminItems();
 });
+ 
