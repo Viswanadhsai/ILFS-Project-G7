@@ -6,39 +6,55 @@ let backendFoundItems = [];
 
 const demoLostItems = [
   {
+    id: "demo-lost-1",
     title: "Black Laptop Sleeve",
     category: "Electronics",
     dateLost: "2026-05-03",
     location: "Library study area",
     description: "Black zip laptop sleeve with charger pocket.",
-    status: "Lost"
+    status: "Lost",
+    posterName: "Alex J.",
+    posterHandle: "alexj",
+    createdAt: "2026-05-03T09:15:00Z"
   },
   {
+    id: "demo-lost-2",
     title: "Student ID Card",
     category: "Documents",
     dateLost: "2026-05-02",
     location: "Cafeteria",
     description: "Student card in a clear plastic holder.",
-    status: "Lost"
+    status: "Lost",
+    posterName: "Priya R.",
+    posterHandle: "priya_r",
+    createdAt: "2026-05-02T14:30:00Z"
   }
 ];
 
 const demoFoundItems = [
   {
+    id: "demo-found-1",
     title: "Blue Backpack",
     category: "Bag",
     dateFound: "2026-05-04",
     location: "Main library entrance",
     description: "Blue backpack with a water bottle in the side pocket.",
-    status: "Found"
+    status: "Found",
+    posterName: "Kim L.",
+    posterHandle: "kimlee",
+    createdAt: "2026-05-04T11:00:00Z"
   },
   {
+    id: "demo-found-2",
     title: "Car Keys",
     category: "Keys",
     dateFound: "2026-05-01",
     location: "Computer lab",
     description: "Key ring with two silver keys and a black tag.",
-    status: "Found"
+    status: "Found",
+    posterName: "Dan O.",
+    posterHandle: "dano_94",
+    createdAt: "2026-05-01T16:45:00Z"
   }
 ];
 
@@ -49,6 +65,17 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+/* ===== HELPER: timeAgo ===== */
+function timeAgo(iso) {
+  if (!iso) return 'just now';
+  const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+  if (diff < 60)   return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  const days = Math.floor(diff / 86400);
+  return days === 1 ? 'Yesterday' : days + 'd ago';
 }
 
 function getLostItems() {
@@ -69,7 +96,9 @@ function mapBackendLostItem(item) {
     dateLost: item.date,
     location: item.location,
     description: item.description || "",
-    status: item.status || "Lost"
+    status: item.status || "Lost",
+    posterName: item.posterName || "Anonymous",
+    posterHandle: item.posterHandle || "user"
   };
 }
 
@@ -81,7 +110,9 @@ function mapBackendFoundItem(item) {
     dateFound: item.date,
     location: item.location,
     description: item.description || "",
-    status: item.status || "Found"
+    status: item.status || "Found",
+    posterName: item.posterName || "Anonymous",
+    posterHandle: item.posterHandle || "user"
   };
 }
 
@@ -229,41 +260,51 @@ function renderPotentialMatches(lostItems, foundItems) {
   list.innerHTML = matches.map(createMatchCard).join("");
 }
 
+/* ===== NEW: FEED-STYLE CARD RENDERING ===== */
 function createItemCard(item, dateLabel, dateValue) {
-  const id = 'detail-' + (item.id || Math.random().toString(36).slice(2));
+  const id = 'card-' + (item.id || Math.random().toString(36).slice(2));
+  const posterInitials = (item.posterName || 'U').trim()
+    .split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const avatarBg = item.status === 'Found' ? '#0F6E56' : '#1F1814';
+  const badgeClass = item.status === 'Found' 
+    ? 'style="background:#E6F4EA;color:#1A5C2E"'
+    : 'style="background:#FFF0E0;color:#7A3D00"';
+  const photoHtml = item.photo 
+    ? `<img src="${item.photo}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid #E8DFD0;margin:10px 0;" />`
+    : '';
+
   return `
-    <div class="col s12 m6 l4">
-      <div class="card item-card z-depth-1" onclick="toggleCardDetail('${id}')" style="cursor:pointer;">
-        <div class="card-content">
-          <span class="status-chip">${escapeHtml(item.status)}</span>
-          <span class="card-title" style="color:var(--ink);font-family:var(--serif);">${escapeHtml(item.title)}</span>
-          <p><b>Category:</b> ${escapeHtml(item.category)}</p>
-          <p><b>${dateLabel}:</b> ${escapeHtml(dateValue)}</p>
-          <p><b>Location:</b> ${escapeHtml(item.location)}</p>
-          <p style="font-size:12px;color:var(--ink-soft);margin-top:6px;" id="${id}-hint">Tap to see more &darr;</p>
-          <div class="item-detail hide" id="${id}">
-            <hr style="margin:10px 0;border-color:var(--border);">
-            <p class="item-description" style="color:var(--ink-muted);">${escapeHtml(item.description)}</p>
-            <a href="chat.html"
-               class="btn btn-primary"
-               style="margin-top:12px;font-size:12px;"
-               onclick="event.stopPropagation()">
-              Contact
-            </a>
+    <div style="background:var(--cream-card);border:1px solid #E8DFD0;padding:18px 20px;margin-bottom:0;transition:background .12s;cursor:pointer" id="post-${escapeHtml(id)}" onclick="alert('Engagement features available on /feed.html')">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        <!-- Avatar -->
+        <div style="width:42px;height:42px;border-radius:50%;background:${avatarBg};color:#DDC9A0;font-family:'Playfair Display', serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          ${posterInitials}
+        </div>
+        <!-- Post body -->
+        <div style="flex:1;min-width:0">
+          <!-- Header -->
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap;font-size:13px">
+            <span style="font-size:14px;font-weight:700;color:#2A1F18">${escapeHtml(item.posterName || 'Anonymous')}</span>
+            <span style="font-size:12px;color:#6B5D52">@${escapeHtml(item.posterHandle || 'user')}</span>
+            <span ${badgeClass} style="padding:2px 9px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.5px">${escapeHtml(item.status)}</span>
+            <span style="font-size:12px;color:#6B5D52;margin-left:auto">${timeAgo(item.createdAt || item.date)}</span>
           </div>
+          <!-- Title -->
+          <div style="font-size:15px;font-weight:700;color:#2A1F18;margin-bottom:3px;font-family:'Playfair Display', serif">${escapeHtml(item.title)}</div>
+          <!-- Meta -->
+          <div style="font-size:12px;color:#6B5D52;margin-bottom:7px">
+            📍 ${escapeHtml(item.location)} &nbsp;·&nbsp; ${dateLabel} ${escapeHtml(dateValue)}
+          </div>
+          <!-- Description -->
+          <div style="font-size:13px;color:#6B5D52;line-height:1.5;margin-bottom:10px">
+            ${escapeHtml(item.description)}
+          </div>
+          <!-- Photo if uploaded -->
+          ${photoHtml}
         </div>
       </div>
     </div>
   `;
-}
-
-function toggleCardDetail(id) {
-  const detail = document.getElementById(id);
-  const hint   = document.getElementById(id + '-hint');
-  if (!detail) return;
-  const isOpen = !detail.classList.contains('hide');
-  detail.classList.toggle('hide', isOpen);
-  if (hint) hint.classList.toggle('hide', !isOpen);
 }
 
 function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
@@ -280,7 +321,9 @@ function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
   }
 
   emptyState.classList.add("hide");
-  list.innerHTML = items.map(item => createItemCard(item, dateLabel, item[dateKey])).join("");
+  // Wrap in a container with proper styling
+  const htmlContent = items.map(item => createItemCard(item, dateLabel, item[dateKey])).join("");
+  list.innerHTML = `<div style="border:1px solid #E8DFD0;border-radius:6px;overflow:hidden">${htmlContent}</div>`;
 }
 
 function renderItems() {
@@ -298,7 +341,6 @@ function renderItems() {
 function togglePanel(panelId) {
   document.getElementById(panelId).classList.toggle("hide");
 }
-
 
 function sendChatMessage() {
   const chatInput = document.getElementById("chatInput");
