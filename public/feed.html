@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browse the Hub – TraceHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing-style.css"/>
+  <link rel="stylesheet" href="css/feed.css"/>
+</head>
+<body>
+
+  <!-- NAV: shows Login/Sign Up for guests, Dashboard link for logged-in users -->
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="index.html">TRACEHUB</a></div>
+      <div class="nav-links" id="navLinks">
+        <!-- injected by feed.js based on auth state -->
+      </div>
+    </nav>
+  </header>
+
+  <main class="feed-page">
+    <div class="feed-layout">
+
+      <!-- ===== LEFT: FEED ===== -->
+      <div class="feed-column">
+
+        <!-- Search bar -->
+        <div class="feed-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            id="feedSearch"
+            placeholder="Search posts by item, location, keyword…"
+            oninput="handleSearch()"
+          />
+        </div>
+
+        <!-- Tab filters -->
+        <div class="feed-tabs">
+          <button class="feed-tab active" data-filter="all"   onclick="setTab(this)">All Posts</button>
+          <button class="feed-tab"        data-filter="lost"  onclick="setTab(this)">Lost</button>
+          <button class="feed-tab"        data-filter="found" onclick="setTab(this)">Found</button>
+        </div>
+
+        <!-- Post list — rendered by feed.js -->
+        <div class="feed-list" id="feedList"></div>
+
+        <!-- Empty state -->
+        <div class="feed-empty hide" id="feedEmpty">
+          <p class="feed-empty-icon">✦</p>
+          <p class="feed-empty-text">No posts match your search.</p>
+        </div>
+
+      </div>
+
+      <!-- ===== RIGHT: SIDEBAR ===== -->
+      <aside class="feed-sidebar">
+
+        <!-- Potential matches -->
+        <div class="sidebar-card">
+          <div class="sidebar-title">✦ Potential Matches</div>
+          <div id="matchList">
+            <p style="font-size:13px;color:var(--ink-soft);font-style:italic;">Loading matches…</p>
+          </div>
+        </div>
+
+        <!-- Weekly stats -->
+        <div class="sidebar-card">
+          <div class="sidebar-title">This week</div>
+          <div id="statsBlock">
+            <div class="stat-row">
+              <span class="stat-label">Items reported</span>
+              <span class="stat-val" id="statTotal">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Items resolved</span>
+              <span class="stat-val resolved" id="statResolved">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Matches made</span>
+              <span class="stat-val matched" id="statMatched">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Active posts</span>
+              <span class="stat-val" id="statActive">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest CTA -->
+        <div class="sidebar-card sidebar-cta" id="guestCta">
+          <div class="sidebar-cta-title">Lost something?</div>
+          <div class="sidebar-cta-desc">
+            Sign up to post your report and get matched with found items automatically.
+          </div>
+          <a href="register.html" class="btn btn-gold full-width">Create an account</a>
+          <div class="sidebar-cta-login">
+            Already have one? <a href="login.html">Login</a>
+          </div>
+        </div>
+
+        <!-- Logged-in CTA -->
+        <div class="sidebar-card hide" id="loggedCta" style="text-align:center">
+          <div class="sidebar-cta-title">Report an item</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+            <a href="report-lost.html" class="btn btn-primary full-width">Report Lost</a>
+            <a href="report-found.html" class="btn btn-gold full-width">Report Found</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="brand">TRACEHUB</div>
+    <div style="margin-top:8px;">
+      &copy; 2026 TraceHub Project &middot;
+      <a href="#">About</a> &middot;
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <script src="js/feed.js"></script>
+</body>
+</html>
