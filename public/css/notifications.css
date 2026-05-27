@@ -1,8 +1,3 @@
-/* ============================================================
-   TraceHub – Notifications Page Styles
-   Commit 3: replace hardcoded #fffdf7 with CSS variable
-   ============================================================ */
-
 .notif-page {
   flex: 1;
   padding: 48px 20px 64px;

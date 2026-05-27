@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
-  <!-- COMMIT 5: added landing-style.css -->
   <link rel="stylesheet" href="css/landing-style.css"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
@@ -19,11 +18,10 @@
       <div class="brand"><a href="main.html">TRACEHUB</a></div>
       <div class="nav-links">
         <a href="feed.html"          class="nav-text-link">Browse Feed</a>
-        <!-- COMMIT 8: notifications icon as link -->
         <a href="notifications.html" class="nav-text-link tooltipped" data-tooltip="Notifications">
           <i class="material-icons" style="vertical-align:middle;font-size:20px;">notifications</i>
         </a>
-        <!-- COMMIT 8: profile icon now links to dashboard.html, removed showProfileComingSoon -->
+       
         <a href="dashboard.html" class="nav-text-link tooltipped" data-tooltip="My Dashboard">
           <i class="material-icons" style="vertical-align:middle;font-size:20px;">account_circle</i>
         </a>
@@ -38,12 +36,11 @@
   <main class="container main-page">
     <section class="main-header">
       <div>
-        <!-- COMMIT 6: removed teal-text class -->
         <h4 style="color: var(--ink); font-family: var(--serif);"><b>Lost &amp; Found</b></h4>
         <p style="color: var(--ink-muted);">Search, report, and track items around campus.</p>
       </div>
       <div class="main-actions">
-        <!-- COMMIT 7: replaced btn teal with btn-primary and btn-gold -->
+        
         <a href="report-lost.html" class="btn btn-primary">Report Lost</a>
         <a href="report-found.html" class="btn btn-gold">Report Found</a>
       </div>
@@ -79,7 +76,7 @@
         <div class="chat-message incoming">Hi, how can we help with your item?</div>
         <div class="chat-input-row">
           <input type="text" id="chatInput" placeholder="Type a message" />
-          <!-- COMMIT 7: replaced btn teal with btn-primary -->
+          
           <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
         </div>
       </div>

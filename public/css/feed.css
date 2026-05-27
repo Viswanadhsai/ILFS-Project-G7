@@ -1,10 +1,3 @@
-/* ============================================================
-   TraceHub — Feed Page Styles  (feed.css)
-   Commit 10: feed page stylesheet
-   Depends on: landing-style.css loaded first.
-   Zero hardcoded colours — all via design tokens.
-   ============================================================ */
-
 /* ===== LAYOUT ===== */
 .feed-page {
   flex: 1;

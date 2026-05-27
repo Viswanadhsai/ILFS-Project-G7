@@ -1,17 +1,3 @@
-/* ============================================================
-   TraceHub – User Dashboard CSS
-   Commit 4: replace all hardcoded hex colours with tokens
-   Changes:
-     #fffdf4  → var(--cream-active)
-     #b91c1c  → var(--danger)
-     #fca5a5  → var(--danger-bg)
-     #fff0e0  → var(--status-lost-bg)
-     #7a3d00  → var(--status-lost-text)
-     #e6f4ea  → var(--status-found-bg)
-     #1a5c2e  → var(--status-found-text)
-     #fff     → var(--cream-card)
-   ============================================================ */
-
 .nav-text-link {
   font-size: 12px; font-weight: 600; letter-spacing: 1px;
   text-transform: uppercase; color: var(--cream); opacity: 0.7;
