@@ -1,5 +1,6 @@
 /* ============================================================
    TraceHub – Notifications Page Styles
+   Commit 3: replace hardcoded #fffdf7 with CSS variable
    ============================================================ */
 
 .notif-page {
@@ -44,10 +45,7 @@
   flex-shrink: 0;
 }
 
-.btn-sm {
-  padding: 8px 16px;
-  font-size: 11px;
-}
+.btn-sm { padding: 8px 16px; font-size: 11px; }
 
 /* ===== FILTERS ===== */
 .notif-filters {
@@ -116,8 +114,9 @@
 
 .notif-item:hover { background: var(--cream-bg); }
 
+/* CHANGED: was background: #fffdf7 */
 .notif-item.unread {
-  background: #fffdf7;
+  background: var(--cream-active);
   border-left: 3px solid var(--gold);
 }
 
