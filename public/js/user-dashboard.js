@@ -132,6 +132,129 @@ function renderMatches(matches) {
     </div>
   `).join("");
 }
+
+function isValidEmail(e) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+}
+ 
+function clearErrors(...ids) {
+  ids.forEach(id => document.getElementById(id).classList.add("hide"));
+}
+ 
+function showMsg(id, text, isError) {
+  const el       = document.getElementById(id);
+  el.textContent = text;
+  el.style.color = isError ? "#b91c1c" : "var(--gold-dark)";
+  el.classList.remove("hide");
+  setTimeout(() => el.classList.add("hide"), 3000);
+}
+ 
+function savePersonalInfo() {
+  clearErrors("nameError", "usernameError", "emailError");
+ 
+  const name     = document.getElementById("editName").value.trim();
+  const username = document.getElementById("editUsername").value.trim();
+  const email    = document.getElementById("editEmail").value.trim();
+  let valid = true;
+ 
+  if (!name) {
+    document.getElementById("nameError").classList.remove("hide");
+    valid = false;
+  }
+  if (username.length > 0 && (username.length < 3 || /\s/.test(username))) {
+    document.getElementById("usernameError").classList.remove("hide");
+    valid = false;
+  }
+  if (!isValidEmail(email)) {
+    document.getElementById("emailError").classList.remove("hide");
+    valid = false;
+  }
+  if (!valid) return;
+ 
+  const user    = loadUser();
+  user.name     = name;
+  user.username = username;
+  user.email    = email;
+  saveUser(user);
+  renderProfileCard(user);
+  showMsg("infoMsg", "Changes saved!", false);
+}
+ 
+function savePassword() {
+  clearErrors("currentPwError", "newPwError", "confirmPwError");
+ 
+  const current = document.getElementById("currentPassword").value;
+  const newPw   = document.getElementById("newPassword").value;
+  const confirm = document.getElementById("confirmPassword").value;
+  let valid = true;
+ 
+  if (!current) {
+    document.getElementById("currentPwError").classList.remove("hide");
+    valid = false;
+  }
+  if (newPw.length < 6) {
+    document.getElementById("newPwError").classList.remove("hide");
+    valid = false;
+  }
+  if (newPw !== confirm) {
+    document.getElementById("confirmPwError").classList.remove("hide");
+    valid = false;
+  }
+  if (!valid) return;
+ 
+  const user = loadUser();
+  if (user.password && user.password !== current) {
+    document.getElementById("currentPwError").textContent = "Current password is incorrect.";
+    document.getElementById("currentPwError").classList.remove("hide");
+    return;
+  }
+ 
+  user.password = newPw;
+  saveUser(user);
+ 
+  ["currentPassword", "newPassword", "confirmPassword"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+ 
+  document.getElementById("pwStrengthFill").style.width = "0";
+  document.getElementById("pwStrengthLabel").textContent = "";
+  showMsg("pwMsg", "Password updated!", false);
+}
+ 
+function checkStrength(pw) {
+  let score = 0;
+  if (pw.length >= 6)           score++;
+  if (pw.length >= 10)          score++;
+  if (/[A-Z]/.test(pw))         score++;
+  if (/[0-9]/.test(pw))         score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+ 
+  const levels = [
+    { label: "",       color: "transparent", pct: "0%"   },
+    { label: "Weak",   color: "#ef4444",     pct: "25%"  },
+    { label: "Fair",   color: "#f97316",     pct: "50%"  },
+    { label: "Good",   color: "#eab308",     pct: "75%"  },
+    { label: "Strong", color: "#22c55e",     pct: "100%" }
+  ];
+ 
+  const lvl = levels[Math.min(score, 4)];
+  document.getElementById("pwStrengthFill").style.width      = lvl.pct;
+  document.getElementById("pwStrengthFill").style.background = lvl.color;
+  document.getElementById("pwStrengthLabel").textContent     = lvl.label;
+}
+ 
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  input.type  = input.type === "password" ? "text" : "password";
+  btn.style.opacity = input.type === "text" ? "1" : "0.5";
+}
+ 
+function confirmDelete() {
+  if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
+}
  
 /* ── init ── */
  
@@ -144,5 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderItems(lost,  "lostList",  "lostEmpty",  "Date lost",  "dateLost");
   renderItems(found, "foundList", "foundEmpty", "Date found", "dateFound");
   renderMatches(demoMatches);
+
+  document.getElementById("newPassword").addEventListener("input", e => checkStrength(e.target.value));
 });
 
