@@ -46,10 +46,16 @@ function getLastMessage(conv) {
   return conv.messages.length ? conv.messages[conv.messages.length - 1] : null;
 }
 
-function renderConvList() {
+function renderConvList(filter) {
+  filter     = filter || "";
   const list = document.getElementById("convList");
 
-  list.innerHTML = conversations.map(conv => {
+  const filtered = conversations.filter(c =>
+    c.name.toLowerCase().includes(filter.toLowerCase()) ||
+    c.subject.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  list.innerHTML = filtered.map(conv => {
     const last     = getLastMessage(conv);
     const preview  = last ? (last.from === "me" ? "You: " : "") + last.text : conv.subject;
     const isActive = conv.id === activeConvId;
@@ -70,10 +76,9 @@ function renderConvList() {
   }).join("");
 }
 
-
 function openConversation(id) {
-  activeConvId  = id;
-  const conv    = conversations.find(c => c.id === id);
+  activeConvId = id;
+  const conv   = conversations.find(c => c.id === id);
   if (!conv) return;
 
   conv.unread = 0;
@@ -83,7 +88,7 @@ function openConversation(id) {
   document.getElementById("chatSub").textContent    = conv.subject;
 
   renderMessages(conv);
-  renderConvList();
+  renderConvList(document.getElementById("chatSearchInput").value);
 }
 
 function renderMessages(conv) {
@@ -115,24 +120,24 @@ function sendMessage() {
   const input = document.getElementById("chatInput");
   const text  = input.value.trim();
   if (!text || !activeConvId) return;
- 
+
   const conv = conversations.find(c => c.id === activeConvId);
   if (!conv) return;
- 
+
   const now  = new Date();
   const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
- 
+
   conv.messages.push({ id: Date.now(), from: "me", text, time, date: "Today" });
- 
+
   input.value        = "";
   input.style.height = "auto";
- 
+
   renderMessages(conv);
-  renderConvList();
- 
+  renderConvList(document.getElementById("chatSearchInput").value);
+
   setTimeout(() => simulateReply(conv), 1200 + Math.random() * 800);
 }
- 
+
 function simulateReply(conv) {
   const replies = [
     "Got it, thanks for letting me know!",
@@ -144,28 +149,53 @@ function simulateReply(conv) {
   const reply = replies[Math.floor(Math.random() * replies.length)];
   const now   = new Date();
   const time  = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
- 
+
   conv.messages.push({ id: Date.now(), from: "them", text: reply, time, date: "Today" });
- 
+
   if (activeConvId === conv.id) {
     renderMessages(conv);
   } else {
     conv.unread++;
   }
- 
-  renderConvList();
+
+  renderConvList(document.getElementById("chatSearchInput").value);
 }
- 
+
 function handleKey(e) {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 }
- 
+
 function autoResize(el) {
   el.style.height = "auto";
   el.style.height = Math.min(el.scrollHeight, 120) + "px";
+}
+
+function filterConversations(value) {
+  renderConvList(value);
+}
+
+function getInitials(name) {
+  return name.trim().split(/\s+/).map(w => w[0]).join("").toUpperCase().slice(0, 2);
+}
+
+function startNewChat() {
+  const name = prompt("Enter the name of the person to message:");
+  if (!name || !name.trim()) return;
+
+  const newConv = {
+    id:       Date.now(),
+    name:     name.trim(),
+    initials: getInitials(name.trim()),
+    subject:  "New conversation",
+    unread:   0,
+    messages: []
+  };
+
+  conversations.unshift(newConv);
+  openConversation(newConv.id);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
