@@ -1,5 +1,6 @@
 const LostItem = require("../models/lost.model");
 const FoundItem = require("../models/found.model");
+const Claim = require("../models/claim.model");
 
 // GET all items (lost + found) with pagination and sorting
 const getAllItems = async (req, res, next) => {
@@ -91,4 +92,22 @@ const getAllMatches = async (req, res, next) => {
     }
 };
 
-module.exports = { getAllItems, getAllMatches };
+// GET all claims
+const getAllClaims = async (req, res, next) => {
+    try {
+        const claims = await Claim.find()
+            .populate("lostItem")
+            .populate("foundItem")
+            .populate("claimedBy", "-password");
+
+        res.json({
+            success: true,
+            totalClaims: claims.length,
+            claims
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { getAllItems, getAllMatches, getAllClaims };
