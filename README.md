@@ -55,6 +55,12 @@ ILFS-Project-G7/
 7. View potential matches on the main dashboard.
 8. Open `admin.html` to review reports and manage item statuses.
 
+## Testing Evidence
+
+Manual UI workflow test cases are documented in:
+
+- `docs/ui-test-cases.md`
+
 ## Frontend Demo Notes
 
 This project currently works as a frontend demo. When the backend is not available, submitted users and item reports are stored in browser LocalStorage.
