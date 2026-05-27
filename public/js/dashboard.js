@@ -230,20 +230,40 @@ function renderPotentialMatches(lostItems, foundItems) {
 }
 
 function createItemCard(item, dateLabel, dateValue) {
+  const id = 'detail-' + (item.id || Math.random().toString(36).slice(2));
   return `
     <div class="col s12 m6 l4">
-      <div class="card item-card z-depth-1">
+      <div class="card item-card z-depth-1" onclick="toggleCardDetail('${id}')" style="cursor:pointer;">
         <div class="card-content">
           <span class="status-chip">${escapeHtml(item.status)}</span>
-          <span class="card-title teal-text">${escapeHtml(item.title)}</span>
+          <span class="card-title" style="color:var(--ink);font-family:var(--serif);">${escapeHtml(item.title)}</span>
           <p><b>Category:</b> ${escapeHtml(item.category)}</p>
           <p><b>${dateLabel}:</b> ${escapeHtml(dateValue)}</p>
           <p><b>Location:</b> ${escapeHtml(item.location)}</p>
-          <p class="item-description">${escapeHtml(item.description)}</p>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:6px;" id="${id}-hint">Tap to see more &darr;</p>
+          <div class="item-detail hide" id="${id}">
+            <hr style="margin:10px 0;border-color:var(--border);">
+            <p class="item-description" style="color:var(--ink-muted);">${escapeHtml(item.description)}</p>
+            <a href="chat.html"
+               class="btn btn-primary"
+               style="margin-top:12px;font-size:12px;"
+               onclick="event.stopPropagation()">
+              Contact
+            </a>
+          </div>
         </div>
       </div>
     </div>
   `;
+}
+
+function toggleCardDetail(id) {
+  const detail = document.getElementById(id);
+  const hint   = document.getElementById(id + '-hint');
+  if (!detail) return;
+  const isOpen = !detail.classList.contains('hide');
+  detail.classList.toggle('hide', isOpen);
+  if (hint) hint.classList.toggle('hide', !isOpen);
 }
 
 function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
@@ -279,15 +299,6 @@ function togglePanel(panelId) {
   document.getElementById(panelId).classList.toggle("hide");
 }
 
-function showProfileComingSoon(event) {
-  event.preventDefault();
-
-  if (window.M) {
-    M.toast({ html: "User dashboard page will be connected later.", classes: "teal" });
-  } else {
-    alert("User dashboard page will be connected later.");
-  }
-}
 
 function sendChatMessage() {
   const chatInput = document.getElementById("chatInput");
