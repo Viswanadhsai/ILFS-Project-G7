@@ -76,7 +76,6 @@
             <p class="dash-section-sub">Manage your personal information and password.</p>
           </div>
 
-          <!-- Personal info form -->
           <div class="dash-form-card">
             <div class="dash-form-card-title">Personal information</div>
             <div class="dash-form-grid">
@@ -105,7 +104,6 @@
             </div>
           </div>
 
-          <!-- Change password form -->
           <div class="dash-form-card">
             <div class="dash-form-card-title">Change password</div>
             <div class="dash-form-grid">
@@ -146,7 +144,6 @@
             </div>
           </div>
 
-          <!-- Danger zone -->
           <div class="dash-form-card danger-card">
             <div class="dash-form-card-title danger-title">Danger zone</div>
             <div class="danger-row">
@@ -158,6 +155,53 @@
             </div>
           </div>
 
+        </section>
+
+        <!-- Lost Items section -->
+        <section class="dash-section hide" id="section-lost">
+          <div class="dash-section-header">
+            <div>
+              <h1 class="dash-section-title">My Lost Items</h1>
+              <p class="dash-section-sub">Items you have reported as lost.</p>
+            </div>
+            <a href="report-lost.html" class="btn btn-gold btn-sm">+ Report Lost</a>
+          </div>
+          <div class="dash-items-list" id="lostList"></div>
+          <div class="dash-empty hide" id="lostEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No lost item reports yet.</p>
+            <a href="report-lost.html" class="btn btn-primary" style="margin-top:14px;">Report a Lost Item</a>
+          </div>
+        </section>
+
+        <!-- Found Items section -->
+        <section class="dash-section hide" id="section-found">
+          <div class="dash-section-header">
+            <div>
+              <h1 class="dash-section-title">My Found Items</h1>
+              <p class="dash-section-sub">Items you have reported as found.</p>
+            </div>
+            <a href="report-found.html" class="btn btn-gold btn-sm">+ Report Found</a>
+          </div>
+          <div class="dash-items-list" id="foundList"></div>
+          <div class="dash-empty hide" id="foundEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No found item reports yet.</p>
+            <a href="report-found.html" class="btn btn-primary" style="margin-top:14px;">Report a Found Item</a>
+          </div>
+        </section>
+
+        <!-- Matches section -->
+        <section class="dash-section hide" id="section-matches">
+          <div class="dash-section-header">
+            <h1 class="dash-section-title">My Matches</h1>
+            <p class="dash-section-sub">Potential matches between lost and found reports.</p>
+          </div>
+          <div class="dash-matches-list" id="matchesList"></div>
+          <div class="dash-empty hide" id="matchesEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No matches found yet. Check back soon!</p>
+          </div>
         </section>
 
       </div>
