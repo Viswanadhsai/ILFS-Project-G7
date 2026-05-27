@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications – TraceHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/notifications.css"/>
+</head>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="main.html" class="nav-text-link">Main Page</a>
+        <a href="dashboard.html" class="nav-text-link">My Dashboard</a>
+        <a href="chat.html" class="btn btn-ghost-light">Messages</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="notif-page">
+    <div class="notif-container">
+
+      <div class="notif-header">
+        <div>
+          <h1 class="notif-title">Notifications</h1>
+          <p class="notif-sub">Stay updated on your reports and matches.</p>
+        </div>
+        <div class="notif-header-actions">
+          <button class="btn btn-ghost-dark btn-sm" onclick="markAllRead()">Mark all read</button>
+          <button class="btn btn-ghost-dark btn-sm" onclick="clearAll()">Clear all</button>
+        </div>
+      </div>
+
+      <div class="notif-filters">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" data-filter="match" onclick="setFilter('match', this)">Matches</button>
+        <button class="filter-btn" data-filter="report" onclick="setFilter('report', this)">Reports</button>
+        <button class="filter-btn" data-filter="system" onclick="setFilter('system', this)">System</button>
+        <span class="notif-unread-count" id="unreadCount"></span>
+      </div>
+
+      <div class="notif-list" id="notifList"></div>
+
+      <div class="notif-empty hide" id="notifEmpty">
+        <p class="notif-empty-icon">✦</p>
+        <p class="notif-empty-text">No notifications here.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/notifications.js"></script>
+</body>
+</html>

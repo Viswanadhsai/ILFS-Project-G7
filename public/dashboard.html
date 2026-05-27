@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Dashboard – TraceHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/user-dashboard.css"/>
+</head>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="main.html" class="nav-text-link">Main Page</a>
+        <a href="notifications.html" class="nav-text-link">Notifications</a>
+        <a href="chat.html" class="btn btn-ghost-light">Messages</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dash-page">
+    <div class="dash-container">
+
+      <!-- ===== LEFT SIDEBAR ===== -->
+      <aside class="dash-sidebar">
+
+        <div class="dash-profile-card">
+          <div class="dash-avatar" id="dashAvatar">?</div>
+          <div class="dash-profile-name" id="dashName">Loading…</div>
+          <div class="dash-profile-username" id="dashUsername"></div>
+          <div class="dash-profile-email" id="dashEmail"></div>
+          <div class="dash-profile-role" id="dashRole">Member</div>
+
+          <div class="dash-stats">
+            <div class="dash-stat">
+              <span class="dash-stat-num" id="statLost">0</span>
+              <span class="dash-stat-label">Lost</span>
+            </div>
+            <div class="dash-stat-divider"></div>
+            <div class="dash-stat">
+              <span class="dash-stat-num" id="statFound">0</span>
+              <span class="dash-stat-label">Found</span>
+            </div>
+            <div class="dash-stat-divider"></div>
+            <div class="dash-stat">
+              <span class="dash-stat-num" id="statResolved">0</span>
+              <span class="dash-stat-label">Resolved</span>
+            </div>
+          </div>
+
+          <div class="dash-card-actions">
+            <button class="btn btn-gold full-w" onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+        <div class="dash-quick-nav">
+          <button class="dash-qnav-btn active" onclick="showSection('account', this)">Account Settings</button>
+          <button class="dash-qnav-btn" onclick="showSection('lost', this)">My Lost Items</button>
+          <button class="dash-qnav-btn" onclick="showSection('found', this)">My Found Items</button>
+          <button class="dash-qnav-btn" onclick="showSection('matches', this)">My Matches</button>
+        </div>
+
+      </aside>
+
+      <!-- ===== RIGHT CONTENT ===== -->
+      <div class="dash-content">
+
+        <!-- Account Settings section -->
+        <section class="dash-section" id="section-account">
+
+          <div class="dash-section-header">
+            <h1 class="dash-section-title">Account Settings</h1>
+            <p class="dash-section-sub">Manage your personal information and password.</p>
+          </div>
+
+          <div class="dash-form-card">
+            <div class="dash-form-card-title">Personal information</div>
+            <div class="dash-form-grid">
+              <div class="dash-form-group">
+                <label class="dash-label">Full name</label>
+                <input type="text" class="dash-input" id="editName" placeholder="Your full name" />
+                <span class="dash-field-error hide" id="nameError">Full name is required.</span>
+              </div>
+              <div class="dash-form-group">
+                <label class="dash-label">Username</label>
+                <div class="dash-input-prefix-wrap">
+                  <span class="dash-input-prefix">@</span>
+                  <input type="text" class="dash-input with-prefix" id="editUsername" placeholder="yourhandle" />
+                </div>
+                <span class="dash-field-error hide" id="usernameError">Username must be 3+ characters, no spaces.</span>
+              </div>
+              <div class="dash-form-group full-col">
+                <label class="dash-label">Email address</label>
+                <input type="email" class="dash-input" id="editEmail" placeholder="you@email.com" />
+                <span class="dash-field-error hide" id="emailError">Enter a valid email address.</span>
+              </div>
+            </div>
+            <div class="dash-form-footer">
+              <span class="dash-save-msg hide" id="infoMsg"></span>
+              <button class="btn btn-gold" onclick="savePersonalInfo()">Save changes</button>
+            </div>
+          </div>
+
+          <div class="dash-form-card">
+            <div class="dash-form-card-title">Change password</div>
+            <div class="dash-form-grid">
+              <div class="dash-form-group full-col">
+                <label class="dash-label">Current password</label>
+                <div class="dash-input-eye-wrap">
+                  <input type="password" class="dash-input" id="currentPassword" placeholder="••••••••" />
+                  <button class="dash-eye-btn" onclick="togglePw('currentPassword', this)" aria-label="Show password">&#128065;</button>
+                </div>
+                <span class="dash-field-error hide" id="currentPwError">Current password is required.</span>
+              </div>
+              <div class="dash-form-group">
+                <label class="dash-label">New password</label>
+                <div class="dash-input-eye-wrap">
+                  <input type="password" class="dash-input" id="newPassword" placeholder="Min 6 characters" />
+                  <button class="dash-eye-btn" onclick="togglePw('newPassword', this)" aria-label="Show password">&#128065;</button>
+                </div>
+                <span class="dash-field-error hide" id="newPwError">Password must be at least 6 characters.</span>
+              </div>
+              <div class="dash-form-group">
+                <label class="dash-label">Confirm new password</label>
+                <div class="dash-input-eye-wrap">
+                  <input type="password" class="dash-input" id="confirmPassword" placeholder="Repeat new password" />
+                  <button class="dash-eye-btn" onclick="togglePw('confirmPassword', this)" aria-label="Show password">&#128065;</button>
+                </div>
+                <span class="dash-field-error hide" id="confirmPwError">Passwords do not match.</span>
+              </div>
+            </div>
+            <div class="pw-strength-wrap">
+              <div class="pw-strength-bar">
+                <div class="pw-strength-fill" id="pwStrengthFill"></div>
+              </div>
+              <span class="pw-strength-label" id="pwStrengthLabel"></span>
+            </div>
+            <div class="dash-form-footer">
+              <span class="dash-save-msg hide" id="pwMsg"></span>
+              <button class="btn btn-gold" onclick="savePassword()">Update password</button>
+            </div>
+          </div>
+
+          <div class="dash-form-card danger-card">
+            <div class="dash-form-card-title danger-title">Danger zone</div>
+            <div class="danger-row">
+              <div>
+                <div class="danger-label">Delete account</div>
+                <div class="danger-desc">Permanently remove your account and all data. This cannot be undone.</div>
+              </div>
+              <button class="btn-danger" onclick="confirmDelete()">Delete account</button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Lost Items section -->
+        <section class="dash-section hide" id="section-lost">
+          <div class="dash-section-header">
+            <div>
+              <h1 class="dash-section-title">My Lost Items</h1>
+              <p class="dash-section-sub">Items you have reported as lost.</p>
+            </div>
+            <a href="report-lost.html" class="btn btn-gold btn-sm">+ Report Lost</a>
+          </div>
+          <div class="dash-items-list" id="lostList"></div>
+          <div class="dash-empty hide" id="lostEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No lost item reports yet.</p>
+            <a href="report-lost.html" class="btn btn-primary" style="margin-top:14px;">Report a Lost Item</a>
+          </div>
+        </section>
+
+        <!-- Found Items section -->
+        <section class="dash-section hide" id="section-found">
+          <div class="dash-section-header">
+            <div>
+              <h1 class="dash-section-title">My Found Items</h1>
+              <p class="dash-section-sub">Items you have reported as found.</p>
+            </div>
+            <a href="report-found.html" class="btn btn-gold btn-sm">+ Report Found</a>
+          </div>
+          <div class="dash-items-list" id="foundList"></div>
+          <div class="dash-empty hide" id="foundEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No found item reports yet.</p>
+            <a href="report-found.html" class="btn btn-primary" style="margin-top:14px;">Report a Found Item</a>
+          </div>
+        </section>
+
+        <!-- Matches section -->
+        <section class="dash-section hide" id="section-matches">
+          <div class="dash-section-header">
+            <h1 class="dash-section-title">My Matches</h1>
+            <p class="dash-section-sub">Potential matches between lost and found reports.</p>
+          </div>
+          <div class="dash-matches-list" id="matchesList"></div>
+          <div class="dash-empty hide" id="matchesEmpty">
+            <p class="dash-empty-icon">✦</p>
+            <p class="dash-empty-text">No matches found yet. Check back soon!</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="brand">TRACEHUB</div>
+    <div style="margin-top:8px;">&copy; 2026 TraceHub Project &middot; <a href="#">About</a> &middot; <a href="#">Contact</a></div>
+  </footer>
+
+  <script src="js/user-dashboard.js"></script>
+</body>
+</html>

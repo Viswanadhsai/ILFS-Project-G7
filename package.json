@@ -1,0 +1,23 @@
+{
+  "name": "ilfs-project-g7",
+  "version": "1.0.0",
+  "description": "Design",
+  "homepage": "https://github.com/Viswanadhsai/ILFS-Project-G7#readme",
+  "bugs": {
+    "url": "https://github.com/Viswanadhsai/ILFS-Project-G7/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viswanadhsai/ILFS-Project-G7.git"
+  },
+  "license": "ISC",
+  "author": "Ruthwik",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
