@@ -89,82 +89,130 @@ async function submitToBackend(item) {
   return data;
 }
 
-async function handleReportLost() {
-  clearErrors();
-
+function handleReportLost() {
   const title = document.getElementById("title").value.trim();
   const category = document.getElementById("category").value;
   const description = document.getElementById("description").value.trim();
-  const dateLost = document.getElementById("dateLost").value.trim();
+  const dateLost = document.getElementById("dateLost").value;
   const location = document.getElementById("location").value.trim();
-  const photoFile = document.getElementById("photo").files[0];
-
-  let valid = true;
-
-  if (!title) {
-    document.getElementById("titleError").textContent = "Item title is required.";
-    valid = false;
+  const photoInput = document.getElementById("photo");
+ 
+  // Validation
+  const titleError = document.getElementById("titleError");
+  const categoryError = document.getElementById("categoryError");
+  const descriptionError = document.getElementById("descriptionError");
+  const dateError = document.getElementById("dateError");
+  const locationError = document.getElementById("locationError");
+ 
+  titleError.textContent = !title ? "Title is required" : "";
+  categoryError.textContent = !category ? "Category is required" : "";
+  descriptionError.textContent = !description ? "Description is required" : "";
+  dateError.textContent = !dateLost ? "Date lost is required" : "";
+  locationError.textContent = !location ? "Location is required" : "";
+ 
+  if (!title || !category || !description || !dateLost || !location) return;
+ 
+  const formError = document.getElementById("formError");
+  const formSuccess = document.getElementById("formSuccess");
+ 
+  // ===== NEW: Handle photo upload =====
+  if (photoInput.files.length > 0) {
+    const file = photoInput.files[0];
+    const reader = new FileReader();
+ 
+    reader.onload = (e) => {
+      const photoDataUrl = e.target.result; // data:image/jpeg;base64,...
+ 
+      const item = {
+        id: "lost-" + Date.now(),
+        title,
+        category,
+        dateLost,
+        location,
+        description,
+        status: "Lost",
+        photo: photoDataUrl, // ← STORE THE DATA URL
+        posterName: currentUser?.name || "Anonymous",
+        posterHandle: currentUser?.email?.split("@")[0] || "user",
+        createdAt: new Date().toISOString()
+      };
+ 
+      const items = JSON.parse(localStorage.getItem("lostItems") || "[]");
+      items.push(item);
+      localStorage.setItem("lostItems", JSON.stringify(items));
+ 
+      formSuccess.textContent = "Lost item reported successfully!";
+      formError.textContent = "";
+ 
+      // Show preview
+      const preview = document.getElementById("submittedPreview");
+      document.getElementById("previewTitle").textContent = title;
+      document.getElementById("previewCategory").textContent = category;
+      document.getElementById("previewDate").textContent = dateLost;
+      document.getElementById("previewLocation").textContent = location;
+      document.getElementById("previewDescription").textContent = description;
+      preview.classList.remove("hide");
+ 
+      // Reset form
+      setTimeout(() => {
+        document.getElementById("title").value = "";
+        document.getElementById("category").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("dateLost").value = "";
+        document.getElementById("location").value = "";
+        photoInput.value = "";
+        document.querySelector(".file-path").value = "";
+        formSuccess.textContent = "";
+        preview.classList.add("hide");
+        if (window.M) M.updateTextFields();
+      }, 3000);
+    };
+ 
+    reader.readAsDataURL(file); // ← Convert file to base64 data URL
+  } else {
+    // No photo uploaded — still save the item without a photo
+    const item = {
+      id: "lost-" + Date.now(),
+      title,
+      category,
+      dateLost,
+      location,
+      description,
+      status: "Lost",
+      // NO photo property
+      posterName: currentUser?.name || "Anonymous",
+      posterHandle: currentUser?.email?.split("@")[0] || "user",
+      createdAt: new Date().toISOString()
+    };
+ 
+    const items = JSON.parse(localStorage.getItem("lostItems") || "[]");
+    items.push(item);
+    localStorage.setItem("lostItems", JSON.stringify(items));
+ 
+    formSuccess.textContent = "Lost item reported successfully!";
+    formError.textContent = "";
+ 
+    // Show preview
+    const preview = document.getElementById("submittedPreview");
+    document.getElementById("previewTitle").textContent = title;
+    document.getElementById("previewCategory").textContent = category;
+    document.getElementById("previewDate").textContent = dateLost;
+    document.getElementById("previewLocation").textContent = location;
+    document.getElementById("previewDescription").textContent = description;
+    preview.classList.remove("hide");
+ 
+    // Reset form
+    setTimeout(() => {
+      document.getElementById("title").value = "";
+      document.getElementById("category").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("dateLost").value = "";
+      document.getElementById("location").value = "";
+      photoInput.value = "";
+      document.querySelector(".file-path").value = "";
+      formSuccess.textContent = "";
+      preview.classList.add("hide");
+      if (window.M) M.updateTextFields();
+    }, 3000);
   }
-
-  if (!category) {
-    document.getElementById("categoryError").textContent = "Please select a category.";
-    valid = false;
-  }
-
-  if (!description) {
-    document.getElementById("descriptionError").textContent = "Description is required.";
-    valid = false;
-  }
-
-  if (!dateLost) {
-    document.getElementById("dateError").textContent = "Date lost is required.";
-    valid = false;
-  }
-
-  if (!location) {
-    document.getElementById("locationError").textContent = "Location is required.";
-    valid = false;
-  }
-
-  if (photoFile) {
-    const allowedTypes = ["image/jpeg", "image/png"];
-    if (!allowedTypes.includes(photoFile.type)) {
-      document.getElementById("photoError").textContent = "Only JPG or PNG files are allowed.";
-      valid = false;
-    }
-  }
-
-  if (!valid) return;
-
-  const lostItem = {
-    id: Date.now(),
-    title,
-    category,
-    description,
-    dateLost,
-    location,
-    photoName: photoFile ? photoFile.name : "",
-    status: "Lost",
-    createdAt: new Date().toISOString()
-  };
-
-  try {
-    const backendResponse = await submitToBackend(lostItem);
-
-    if (backendResponse) {
-      document.getElementById("formSuccess").textContent = "Lost item submitted successfully.";
-      showToast("Lost item submitted successfully.");
-    } else {
-      saveLostItemLocally(lostItem);
-      document.getElementById("formSuccess").textContent = "Lost item saved successfully for frontend demo.";
-      showToast("Lost item saved successfully.");
-    }
-  } catch (err) {
-    saveLostItemLocally(lostItem);
-    document.getElementById("formSuccess").textContent = "Lost item saved successfully for frontend demo.";
-    showToast("Lost item saved successfully.");
-  }
-
-  showSubmittedPreview(lostItem);
-  resetFormFields();
 }

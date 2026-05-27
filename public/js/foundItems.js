@@ -159,56 +159,130 @@ async function submitToBackend(item) {
   return data;
 }
 
-async function handleReportFound() {
-  clearErrors();
-
+function handleReportFound() {
   const title = document.getElementById("title").value.trim();
   const category = document.getElementById("category").value;
   const description = document.getElementById("description").value.trim();
-  const dateFound = document.getElementById("dateFound").value.trim();
+  const dateFound = document.getElementById("dateFound").value;
   const location = document.getElementById("location").value.trim();
-  const photoFile = document.getElementById("photo").files[0];
-
-  const isValid = validateFoundItem({
-    title,
-    category,
-    description,
-    dateFound,
-    location,
-    photoFile
-  });
-
-  if (!isValid) return;
-
-  const foundItem = {
-    id: Date.now(),
-    title,
-    category,
-    description,
-    dateFound,
-    location,
-    photoName: photoFile ? photoFile.name : "",
-    status: "Found",
-    createdAt: new Date().toISOString()
-  };
-
-  try {
-    const backendResponse = await submitToBackend(foundItem);
-
-    if (backendResponse) {
-      document.getElementById("formSuccess").textContent = "Found item submitted successfully.";
-      showToast("Found item submitted successfully.");
-    } else {
-      saveFoundItemLocally(foundItem);
-      document.getElementById("formSuccess").textContent = "Found item saved successfully for frontend demo.";
-      showToast("Found item saved successfully.");
-    }
-  } catch (err) {
-    saveFoundItemLocally(foundItem);
-    document.getElementById("formSuccess").textContent = "Found item saved successfully for frontend demo.";
-    showToast("Found item saved successfully.");
+  const photoInput = document.getElementById("photo");
+ 
+  // Validation
+  const titleError = document.getElementById("titleError");
+  const categoryError = document.getElementById("categoryError");
+  const descriptionError = document.getElementById("descriptionError");
+  const dateError = document.getElementById("dateError");
+  const locationError = document.getElementById("locationError");
+ 
+  titleError.textContent = !title ? "Title is required" : "";
+  categoryError.textContent = !category ? "Category is required" : "";
+  descriptionError.textContent = !description ? "Description is required" : "";
+  dateError.textContent = !dateFound ? "Date found is required" : "";
+  locationError.textContent = !location ? "Location is required" : "";
+ 
+  if (!title || !category || !description || !dateFound || !location) return;
+ 
+  const formError = document.getElementById("formError");
+  const formSuccess = document.getElementById("formSuccess");
+ 
+  // ===== NEW: Handle photo upload =====
+  if (photoInput.files.length > 0) {
+    const file = photoInput.files[0];
+    const reader = new FileReader();
+ 
+    reader.onload = (e) => {
+      const photoDataUrl = e.target.result; // data:image/jpeg;base64,...
+ 
+      const item = {
+        id: "found-" + Date.now(),
+        title,
+        category,
+        dateFound,
+        location,
+        description,
+        status: "Found",
+        photo: photoDataUrl, // ← STORE THE DATA URL
+        posterName: currentUser?.name || "Anonymous",
+        posterHandle: currentUser?.email?.split("@")[0] || "user",
+        createdAt: new Date().toISOString()
+      };
+ 
+      const items = JSON.parse(localStorage.getItem("foundItems") || "[]");
+      items.push(item);
+      localStorage.setItem("foundItems", JSON.stringify(items));
+ 
+      formSuccess.textContent = "Found item reported successfully!";
+      formError.textContent = "";
+ 
+      // Show preview
+      const preview = document.getElementById("submittedPreview");
+      document.getElementById("previewTitle").textContent = title;
+      document.getElementById("previewCategory").textContent = category;
+      document.getElementById("previewDate").textContent = dateFound;
+      document.getElementById("previewLocation").textContent = location;
+      document.getElementById("previewDescription").textContent = description;
+      preview.classList.remove("hide");
+ 
+      // Reset form
+      setTimeout(() => {
+        document.getElementById("title").value = "";
+        document.getElementById("category").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("dateFound").value = "";
+        document.getElementById("location").value = "";
+        photoInput.value = "";
+        document.querySelector(".file-path").value = "";
+        formSuccess.textContent = "";
+        preview.classList.add("hide");
+        if (window.M) M.updateTextFields();
+      }, 3000);
+    };
+ 
+    reader.readAsDataURL(file); // ← Convert file to base64 data URL
+  } else {
+    // No photo uploaded — still save the item without a photo
+    const item = {
+      id: "found-" + Date.now(),
+      title,
+      category,
+      dateFound,
+      location,
+      description,
+      status: "Found",
+      // NO photo property
+      posterName: currentUser?.name || "Anonymous",
+      posterHandle: currentUser?.email?.split("@")[0] || "user",
+      createdAt: new Date().toISOString()
+    };
+ 
+    const items = JSON.parse(localStorage.getItem("foundItems") || "[]");
+    items.push(item);
+    localStorage.setItem("foundItems", JSON.stringify(items));
+ 
+    formSuccess.textContent = "Found item reported successfully!";
+    formError.textContent = "";
+ 
+    // Show preview
+    const preview = document.getElementById("submittedPreview");
+    document.getElementById("previewTitle").textContent = title;
+    document.getElementById("previewCategory").textContent = category;
+    document.getElementById("previewDate").textContent = dateFound;
+    document.getElementById("previewLocation").textContent = location;
+    document.getElementById("previewDescription").textContent = description;
+    preview.classList.remove("hide");
+ 
+    // Reset form
+    setTimeout(() => {
+      document.getElementById("title").value = "";
+      document.getElementById("category").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("dateFound").value = "";
+      document.getElementById("location").value = "";
+      photoInput.value = "";
+      document.querySelector(".file-path").value = "";
+      formSuccess.textContent = "";
+      preview.classList.add("hide");
+      if (window.M) M.updateTextFields();
+    }, 3000);
   }
-
-  showSubmittedPreview(foundItem);
-  resetFormFields();
 }
