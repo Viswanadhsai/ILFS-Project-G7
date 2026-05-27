@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
+const { errorHandler, notFoundHandler } = require("./middleware/errorHandler");
+
 const app = express();
 
 // Middleware
@@ -23,13 +25,11 @@ app.get("/", (req, res) => {
     res.json({ message: "ILFS backend running" });
 });
 
-// Error handler
-app.use((err, req, res, next) => {
-    console.error("Backend Error:", err);
-    res.status(err.status || 500).json({
-        message: err.message || "Internal Server Error"
-    });
-});
+// 404 Handler
+app.use(notFoundHandler);
+
+// Global Error Handler
+app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
