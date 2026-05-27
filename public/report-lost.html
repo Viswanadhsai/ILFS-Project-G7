@@ -3,33 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Report Item - TRACE HUB</title>
+  <title>Report Lost Item – TraceHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <!-- COMMIT 5: added landing-style.css -->
   <link rel="stylesheet" href="css/landing-style.css"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
-<body class="grey lighten-4">
 
-  <nav class="teal">
-    <div class="nav-wrapper container">
-      <a href="main.html" class="brand-logo">TRACE HUB</a>
-      <ul id="nav-mobile" class="right">
-        <li><a href="main.html">Main Page</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
-      </ul>
-    </div>
-  </nav>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="main.html" class="nav-text-link">Main Page</a>
+        <a href="#" onclick="logout()" class="nav-text-link">Logout</a>
+      </div>
+    </nav>
+  </header>
 
   <main class="container" style="max-width: 640px; margin-top: 40px;">
     <div class="card z-depth-2">
       <div class="card-content">
-        <h5 class="teal-text"><b>Report Item</b></h5>
-        <p class="grey-text">Fill in the details below to report an item.</p>
+        <h5 style="font-family: var(--serif); color: var(--ink);"><b>Report Lost Item</b></h5>
+        <p style="color: var(--ink-muted);">Fill in the details below to report an item.</p>
 
         <div class="input-field">
           <input type="text" id="title" />
           <label for="title">Item Title</label>
-          <span class="helper-text red-text" id="titleError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="titleError"></span>
         </div>
 
         <div class="input-field">
@@ -45,47 +48,47 @@
             <option value="Other">Other</option>
           </select>
           <label>Category</label>
-          <span class="helper-text red-text" id="categoryError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="categoryError"></span>
         </div>
 
         <div class="input-field">
           <textarea id="description" class="materialize-textarea"></textarea>
           <label for="description">Description</label>
-          <span class="helper-text red-text" id="descriptionError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="descriptionError"></span>
         </div>
 
         <div class="input-field">
           <input type="date" id="dateLost" />
           <label for="dateLost" class="active">Date Lost</label>
-          <span class="helper-text red-text" id="dateError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="dateError"></span>
         </div>
 
         <div class="input-field">
           <input type="text" id="location" />
           <label for="location">Location Lost</label>
-          <span class="helper-text red-text" id="locationError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="locationError"></span>
         </div>
 
         <div class="file-field input-field">
-          <div class="btn teal">
+          <div class="btn btn-gold">
             <span>Photo</span>
             <input type="file" id="photo" accept=".jpg,.jpeg,.png" />
           </div>
           <div class="file-path-wrapper">
-            <input class="file-path validate" type="text" placeholder="Optional - JPG or PNG only" />
+            <input class="file-path validate" type="text" placeholder="Optional – JPG or PNG only" />
           </div>
-          <span class="helper-text red-text" id="photoError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="photoError"></span>
         </div>
 
-        <span class="red-text" id="formError"></span>
-        <span class="green-text" id="formSuccess"></span>
+        <span style="color: var(--danger);"  id="formError"></span>
+        <span style="color: var(--gold-dark);" id="formSuccess"></span>
 
-        <button class="btn teal waves-effect waves-light full-width mt-10" onclick="handleReportLost()">
-          Submit Item
+        <button class="btn btn-primary full-width mt-10" onclick="handleReportLost()">
+          Submit Lost Item
         </button>
 
         <div class="submitted-preview hide" id="submittedPreview">
-          <h6 class="teal-text"><b>Submitted item</b></h6>
+          <h6 style="color: var(--gold-dark);"><b>Submitted item</b></h6>
           <p><b>Title:</b> <span id="previewTitle"></span></p>
           <p><b>Category:</b> <span id="previewCategory"></span></p>
           <p><b>Date lost:</b> <span id="previewDate"></span></p>

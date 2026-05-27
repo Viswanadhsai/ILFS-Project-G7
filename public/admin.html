@@ -3,32 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard - TRACE HUB</title>
+  <title>Admin Dashboard – TraceHub</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <!-- COMMIT 5: added landing-style.css -->
   <link rel="stylesheet" href="css/landing-style.css"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
-<body class="grey lighten-4">
 
-  <nav class="teal">
-    <div class="nav-wrapper container">
-      <a href="main.html" class="brand-logo">TRACE HUB</a>
-      <ul id="nav-mobile" class="right">
-        <li><a href="main.html">Main Page</a></li>
-        <li><a href="report-lost.html">Report Lost</a></li>
-        <li><a href="report-found.html">Report Found</a></li>
-      </ul>
-    </div>
-  </nav>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="main.html"         class="nav-text-link">Main Page</a>
+        <a href="report-lost.html"  class="nav-text-link">Report Lost</a>
+        <a href="report-found.html" class="nav-text-link">Report Found</a>
+      </div>
+    </nav>
+  </header>
 
   <main class="container admin-page">
     <section class="admin-header">
       <div>
-        <h4 class="teal-text"><b>Admin Dashboard</b></h4>
-        <p class="grey-text text-darken-1">Review reports, update item progress, and manage frontend demo records.</p>
+        <h4 style="font-family: var(--serif); color: var(--ink);"><b>Admin Dashboard</b></h4>
+        <p style="color: var(--ink-muted);">Review reports, update item progress, and manage frontend demo records.</p>
       </div>
-      <button class="btn teal waves-effect waves-light" onclick="resetDemoData()">
+      <button class="btn btn-primary waves-effect waves-light" onclick="resetDemoData()">
         <i class="material-icons left">refresh</i>
         Reset Demo
       </button>
@@ -85,13 +88,13 @@
     <section class="admin-match-panel">
       <div class="admin-table-header">
         <h5><b>Potential Matches</b></h5>
-        <span class="grey-text text-darken-1" id="matchCount">0 matches</span>
+        <span style="color: var(--ink-soft);" id="matchCount">0 matches</span>
       </div>
       <div class="admin-match-list" id="matchList"></div>
       <div class="empty-state card z-depth-1 hide" id="matchEmptyState">
         <div class="card-content center-align">
-          <h6 class="teal-text"><b>No likely matches yet</b></h6>
-          <p class="grey-text">Matching compares category, keywords, location, and report dates.</p>
+          <h6 style="color: var(--gold-dark);"><b>No likely matches yet</b></h6>
+          <p style="color: var(--ink-muted);">Matching compares category, keywords, location, and report dates.</p>
         </div>
       </div>
     </section>
@@ -99,7 +102,7 @@
     <section class="admin-table-panel">
       <div class="admin-table-header">
         <h5><b>Item Reports</b></h5>
-        <span class="grey-text text-darken-1" id="visibleReports">0 shown</span>
+        <span style="color: var(--ink-soft);" id="visibleReports">0 shown</span>
       </div>
 
       <div class="responsive-table">
@@ -120,8 +123,8 @@
 
       <div class="empty-state card z-depth-1 hide" id="adminEmptyState">
         <div class="card-content center-align">
-          <h6 class="teal-text"><b>No reports found</b></h6>
-          <p class="grey-text">Try a different search or filter.</p>
+          <h6 style="color: var(--gold-dark);"><b>No reports found</b></h6>
+          <p style="color: var(--ink-muted);">Try a different search or filter.</p>
         </div>
       </div>
     </section>
