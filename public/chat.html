@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messages – TraceHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/chat.css"/>
+</head>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="main.html" class="nav-text-link">Main Page</a>
+        <a href="notifications.html" class="nav-text-link">Notifications</a>
+        <a href="dashboard.html" class="btn btn-ghost-light">My Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="chat-page">
+
+    <!-- Sidebar: conversation list -->
+    <aside class="chat-sidebar">
+      <div class="chat-sidebar-header">
+        <h2 class="chat-sidebar-title">Messages</h2>
+        <button class="btn btn-gold btn-sm" onclick="startNewChat()">+ New</button>
+      </div>
+      <div class="chat-search-wrap">
+        <input type="text" class="chat-search-input" placeholder="Search conversations…" oninput="filterConversations(this.value)" />
+      </div>
+      <div class="conv-list" id="convList"></div>
+    </aside>
+
+    <!-- Main: active chat -->
+    <section class="chat-main">
+      <div class="chat-main-header" id="chatHeader">
+        <div class="chat-avatar" id="chatAvatar">?</div>
+        <div>
+          <div class="chat-main-name" id="chatName">Select a conversation</div>
+          <div class="chat-main-sub" id="chatSub">Choose from the left to start messaging</div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-placeholder">
+          <p class="chat-placeholder-icon">✦</p>
+          <p class="chat-placeholder-text">Select a conversation to read messages.</p>
+        </div>
+      </div>
+
+      <div class="chat-input-area" id="chatInputArea">
+        <textarea
+          class="chat-textarea"
+          id="chatInput"
+          placeholder="Type a message…"
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="chat-send-btn" onclick="sendMessage()" aria-label="Send message">&#8593;</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/chat.js"></script>
+</body>
+</html>
