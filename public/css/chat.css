@@ -1,5 +1,6 @@
 /* ============================================================
    TraceHub – Chat Page Styles
+   Commit 3: replace hardcoded #fffdf4 with CSS variable
    ============================================================ */
 
 body { overflow: hidden; }
@@ -75,7 +76,9 @@ body { overflow: hidden; }
 }
 
 .conv-item:hover { background: var(--cream-bg); }
-.conv-item.active { background: #fffdf4; border-left: 3px solid var(--gold); }
+
+/* CHANGED: was background: #fffdf4 */
+.conv-item.active { background: var(--cream-active); border-left: 3px solid var(--gold); }
 
 .conv-avatar {
   width: 42px;
