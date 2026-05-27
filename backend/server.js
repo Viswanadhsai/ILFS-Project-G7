@@ -5,6 +5,9 @@ const connectDB = require("./config/db");
 
 const app = express();
 
+//models
+require("./models/claim.model");
+
 // Middleware
 app.use(cors());
 app.use(express.json());
