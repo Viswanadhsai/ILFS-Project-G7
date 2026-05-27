@@ -17,6 +17,7 @@ app.use("/api/lost", require("./routes/lost.routes"));
 app.use("/api/found", require("./routes/found.routes"));
 app.use("/api/matching", require("./routes/matching.routes"));
 app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/admin", require("./routes/admin.routes"));
 
 // Root route
 app.get("/", (req, res) => {
