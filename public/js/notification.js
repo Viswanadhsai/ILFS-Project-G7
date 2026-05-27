@@ -52,6 +52,7 @@ const defaultNotifications = [
 ];
  
 let notifications = [];
+let currentFilter = "all";
  
 function loadNotifications() {
   const stored = localStorage.getItem(NOTIF_KEY);
@@ -61,10 +62,24 @@ function loadNotifications() {
 function saveNotifications() {
   localStorage.setItem(NOTIF_KEY, JSON.stringify(notifications));
 }
+
+function getFiltered() {
+  if (currentFilter === "all") return notifications;
+  return notifications.filter(n => n.type === currentFilter);
+}
+ 
+function updateUnreadCount() {
+  const unread = notifications.filter(n => n.unread).length;
+  const el     = document.getElementById("unreadCount");
+  el.textContent = unread > 0 ? `${unread} unread` : "All caught up";
+}
  
 function renderNotifications() {
   const list  = document.getElementById("notifList");
   const empty = document.getElementById("notifEmpty");
+  const filtered = getFiltered(); 
+
+  updateUnreadCount();
  
   if (!notifications.length) {
     list.innerHTML = "";
@@ -84,6 +99,13 @@ function renderNotifications() {
       </div>
     </div>
   `).join("");
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderNotifications();
 }
  
 document.addEventListener("DOMContentLoaded", () => {
