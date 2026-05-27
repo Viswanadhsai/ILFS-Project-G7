@@ -8,34 +8,44 @@
   <link rel="stylesheet" href="css/landing-style.css"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
-<body class="grey lighten-4">
 
-  <div class="container" style="max-width: 480px; margin-top: 80px;">
-    <div class="card z-depth-3">
+<body>
+ 
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="index.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="register.html" class="btn btn-ghost-light">Sign Up</a>
+      </div>
+    </nav>
+  </header>
+ 
+  <div class="container" style="max-width: 480px; margin-top: 60px;">
+    <div class="card z-depth-2">
       <div class="card-content">
-        <h5 class="center-align teal-text"><b>TRACE HUB</b></h5>
-        <p class="center-align grey-text">Login to your account</p>
-
+        <h5 class="center-align" style="font-family: var(--serif); color: var(--ink);"><b>TRACEHUB</b></h5>
+        <p class="center-align" style="color: var(--ink-muted);">Login to your account</p>
+ 
         <div class="input-field">
           <input type="email" id="email" />
           <label for="email">Email</label>
-          <span class="helper-text red-text" id="emailError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="emailError"></span>
         </div>
-
+ 
         <div class="input-field">
           <input type="password" id="password" />
           <label for="password">Password</label>
-          <span class="helper-text red-text" id="passwordError"></span>
+          <span class="helper-text" style="color: var(--danger);" id="passwordError"></span>
         </div>
+ 
+        <span style="color: var(--danger);" id="loginError"></span>
 
-        <span class="red-text" id="loginError"></span>
-
-        <button class="btn teal waves-effect waves-light full-width mt-10" onclick="handleLogin()">
+         <button class="btn btn-primary full-width mt-10" onclick="handleLogin()">
           Login
         </button>
-
+ 
         <p class="center-align mt-10">
-          Don't have an account? <a href="register.html">Register here</a>
+          Don't have an account? <a href="register.html" style="color: var(--gold-dark);">Register here</a>
         </p>
       </div>
     </div>

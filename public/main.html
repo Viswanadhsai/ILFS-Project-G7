@@ -3,55 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Main Page - TRACE HUB</title>
+  <title>Main Page – TraceHub</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <!-- COMMIT 5: added landing-style.css -->
   <link rel="stylesheet" href="css/landing-style.css"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
-<body class="grey lighten-4">
 
-  <nav class="teal">
-    <div class="nav-wrapper container main-nav">
-      <a href="main.html" class="brand-logo">TRACE HUB</a>
-      <ul class="right nav-actions">
-        <li>
-          <a href="#notificationsPanel" class="tooltipped" data-tooltip="Notifications" onclick="togglePanel('notificationsPanel')">
-            <i class="material-icons">notifications</i>
-          </a>
-        </li>
-        <li>
-          <a href="#chatPanel" class="tooltipped" data-tooltip="Chat" onclick="togglePanel('chatPanel')">
-            <i class="material-icons">chat</i>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="profile-link tooltipped" data-tooltip="User dashboard" onclick="showProfileComingSoon(event)">
-            <i class="material-icons">account_circle</i>
-          </a>
-        </li>
-        <li>
-          <a href="admin.html" class="tooltipped" data-tooltip="Admin dashboard">
-            <i class="material-icons">admin_panel_settings</i>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<body>
+
+  <header>
+    <nav class="top-nav dark">
+      <div class="brand"><a href="main.html">TRACEHUB</a></div>
+      <div class="nav-links">
+        <a href="feed.html"          class="nav-text-link">Browse Feed</a>
+        <!-- COMMIT 8: notifications icon as link -->
+        <a href="notifications.html" class="nav-text-link tooltipped" data-tooltip="Notifications">
+          <i class="material-icons" style="vertical-align:middle;font-size:20px;">notifications</i>
+        </a>
+        <!-- COMMIT 8: profile icon now links to dashboard.html, removed showProfileComingSoon -->
+        <a href="dashboard.html" class="nav-text-link tooltipped" data-tooltip="My Dashboard">
+          <i class="material-icons" style="vertical-align:middle;font-size:20px;">account_circle</i>
+        </a>
+        <a href="admin.html" class="nav-text-link tooltipped" data-tooltip="Admin">
+          <i class="material-icons" style="vertical-align:middle;font-size:20px;">admin_panel_settings</i>
+        </a>
+        <a href="chat.html" class="btn btn-ghost-light">Messages</a>
+      </div>
+    </nav>
+  </header>
 
   <main class="container main-page">
     <section class="main-header">
       <div>
-        <h4 class="teal-text"><b>Lost & Found Main Page</b></h4>
-        <p class="grey-text text-darken-1">Search, report, and track items around campus.</p>
+        <!-- COMMIT 6: removed teal-text class -->
+        <h4 style="color: var(--ink); font-family: var(--serif);"><b>Lost &amp; Found</b></h4>
+        <p style="color: var(--ink-muted);">Search, report, and track items around campus.</p>
       </div>
       <div class="main-actions">
-        <a href="report-lost.html" class="btn teal waves-effect waves-light">
-          Report Lost
-        </a>
-        <a href="report-found.html" class="btn teal lighten-1 waves-effect waves-light">
-          Report Found
-        </a>
+        <!-- COMMIT 7: replaced btn teal with btn-primary and btn-gold -->
+        <a href="report-lost.html" class="btn btn-primary">Report Lost</a>
+        <a href="report-found.html" class="btn btn-gold">Report Found</a>
       </div>
     </section>
 
@@ -71,8 +65,8 @@
             <i class="material-icons">close</i>
           </button>
         </div>
-        <p class="grey-text text-darken-2">New found item report: Blue backpack near the library.</p>
-        <p class="grey-text text-darken-2">Reminder: Check your submitted item status.</p>
+        <p style="color: var(--ink-muted);">New found item report: Blue backpack near the library.</p>
+        <p style="color: var(--ink-muted);">Reminder: Check your submitted item status.</p>
       </div>
 
       <div class="info-panel hide" id="chatPanel">
@@ -85,7 +79,8 @@
         <div class="chat-message incoming">Hi, how can we help with your item?</div>
         <div class="chat-input-row">
           <input type="text" id="chatInput" placeholder="Type a message" />
-          <button class="btn teal" onclick="sendChatMessage()">Send</button>
+          <!-- COMMIT 7: replaced btn teal with btn-primary -->
+          <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
         </div>
       </div>
     </section>
@@ -93,13 +88,13 @@
     <section class="section-block match-panel">
       <div class="section-heading">
         <h5><b>Potential Matches</b></h5>
-        <span class="badge teal white-text" id="potentialMatchCount">0</span>
+        <span class="match-score" id="potentialMatchCount">0</span>
       </div>
       <div class="match-list" id="potentialMatchesList"></div>
       <div class="empty-state card z-depth-1 hide" id="matchesEmptyState">
         <div class="card-content center-align">
-          <h6 class="teal-text"><b>No potential matches found</b></h6>
-          <p class="grey-text">Likely matches will appear when lost and found reports share similar details.</p>
+          <h6 style="color: var(--gold-dark);"><b>No potential matches found</b></h6>
+          <p style="color: var(--ink-muted);">Likely matches will appear when reports share similar details.</p>
         </div>
       </div>
     </section>
@@ -107,13 +102,13 @@
     <section class="section-block">
       <div class="section-heading">
         <h5><b>Lost Items</b></h5>
-        <span class="badge teal white-text" id="lostCount">0</span>
+        <span class="match-score" id="lostCount">0</span>
       </div>
       <div class="row" id="lostItemsList"></div>
       <div class="empty-state card z-depth-1 hide" id="lostEmptyState">
         <div class="card-content center-align">
-          <h6 class="teal-text"><b>No lost items found</b></h6>
-          <p class="grey-text">Lost item reports will appear here.</p>
+          <h6 style="color: var(--gold-dark);"><b>No lost items found</b></h6>
+          <p style="color: var(--ink-muted);">Lost item reports will appear here.</p>
         </div>
       </div>
     </section>
@@ -121,13 +116,13 @@
     <section class="section-block">
       <div class="section-heading">
         <h5><b>Found Items</b></h5>
-        <span class="badge teal white-text" id="foundCount">0</span>
+        <span class="match-score" id="foundCount">0</span>
       </div>
       <div class="row" id="foundItemsList"></div>
       <div class="empty-state card z-depth-1 hide" id="foundEmptyState">
         <div class="card-content center-align">
-          <h6 class="teal-text"><b>No found items found</b></h6>
-          <p class="grey-text">Found item posts will appear here.</p>
+          <h6 style="color: var(--gold-dark);"><b>No found items found</b></h6>
+          <p style="color: var(--ink-muted);">Found item posts will appear here.</p>
         </div>
       </div>
     </section>
