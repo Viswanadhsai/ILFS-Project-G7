@@ -168,6 +168,7 @@ async function handleReportFound() {
   const dateFound = document.getElementById("dateFound").value.trim();
   const location = document.getElementById("location").value.trim();
   const photoFile = document.getElementById("photo").files[0];
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const isValid = validateFoundItem({
     title,
@@ -189,6 +190,8 @@ async function handleReportFound() {
     location,
     photoName: photoFile ? photoFile.name : "",
     status: "Found",
+    reporterEmail: user.email || "",
+    reporterName: user.name || "",
     createdAt: new Date().toISOString()
   };
 

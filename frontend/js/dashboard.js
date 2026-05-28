@@ -197,8 +197,20 @@ function getPotentialMatches(lostItems, foundItems) {
     .slice(0, 4);
 }
 
+function createClaimUrl(item, matchTitle = "") {
+  const params = new URLSearchParams({
+    itemTitle: item.title || "",
+    category: item.category || "",
+    location: item.location || "",
+    matchTitle
+  });
+
+  return `claims.html?${params.toString()}`;
+}
+
 function createMatchCard(match) {
   const reasonText = match.reasons.length ? match.reasons.join(", ") : "possible text match";
+  const claimUrl = createClaimUrl(match.foundItem, match.lostItem.title);
 
   return `
     <div class="match-card">
@@ -207,6 +219,10 @@ function createMatchCard(match) {
       <p class="grey-text text-darken-1">${escapeHtml(reasonText)}</p>
       <p><b>Lost near:</b> ${escapeHtml(match.lostItem.location)}</p>
       <p><b>Found near:</b> ${escapeHtml(match.foundItem.location)}</p>
+      <a href="${escapeHtml(claimUrl)}" class="btn teal waves-effect waves-light claim-action">
+        <i class="material-icons left">assignment</i>
+        Claim Item
+      </a>
     </div>
   `;
 }
@@ -229,7 +245,18 @@ function renderPotentialMatches(lostItems, foundItems) {
   list.innerHTML = matches.map(createMatchCard).join("");
 }
 
-function createItemCard(item, dateLabel, dateValue) {
+function createItemCard(item, dateLabel, dateValue, itemType) {
+  const claimButton = itemType === "Found"
+    ? `
+        <div class="claim-card-action">
+          <a href="${escapeHtml(createClaimUrl(item))}" class="btn teal waves-effect waves-light claim-found-button">
+            <i class="material-icons left">assignment</i>
+            Claim This Item
+          </a>
+        </div>
+      `
+    : "";
+
   return `
     <div class="col s12 m6 l4">
       <div class="card item-card z-depth-1">
@@ -240,13 +267,14 @@ function createItemCard(item, dateLabel, dateValue) {
           <p><b>${dateLabel}:</b> ${escapeHtml(dateValue)}</p>
           <p><b>Location:</b> ${escapeHtml(item.location)}</p>
           <p class="item-description">${escapeHtml(item.description)}</p>
+          ${claimButton}
         </div>
       </div>
     </div>
   `;
 }
 
-function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
+function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey, itemType) {
   const list = document.getElementById(listId);
   const emptyState = document.getElementById(emptyId);
   const count = document.getElementById(countId);
@@ -260,7 +288,7 @@ function renderItemGroup(items, listId, emptyId, countId, dateLabel, dateKey) {
   }
 
   emptyState.classList.add("hide");
-  list.innerHTML = items.map(item => createItemCard(item, dateLabel, item[dateKey])).join("");
+  list.innerHTML = items.map(item => createItemCard(item, dateLabel, item[dateKey], itemType)).join("");
 }
 
 function renderItems() {
@@ -271,8 +299,8 @@ function renderItems() {
   const foundItems = allFoundItems.filter(item => itemMatchesSearch(item, searchTerm));
 
   renderPotentialMatches(allLostItems, allFoundItems);
-  renderItemGroup(lostItems, "lostItemsList", "lostEmptyState", "lostCount", "Date lost", "dateLost");
-  renderItemGroup(foundItems, "foundItemsList", "foundEmptyState", "foundCount", "Date found", "dateFound");
+  renderItemGroup(lostItems, "lostItemsList", "lostEmptyState", "lostCount", "Date lost", "dateLost", "Lost");
+  renderItemGroup(foundItems, "foundItemsList", "foundEmptyState", "foundCount", "Date found", "dateFound", "Found");
 }
 
 function togglePanel(panelId) {

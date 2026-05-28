@@ -98,6 +98,7 @@ async function handleReportLost() {
   const dateLost = document.getElementById("dateLost").value.trim();
   const location = document.getElementById("location").value.trim();
   const photoFile = document.getElementById("photo").files[0];
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   let valid = true;
 
@@ -145,6 +146,8 @@ async function handleReportLost() {
     location,
     photoName: photoFile ? photoFile.name : "",
     status: "Lost",
+    reporterEmail: user.email || "",
+    reporterName: user.name || "",
     createdAt: new Date().toISOString()
   };
 
