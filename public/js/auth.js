@@ -81,18 +81,17 @@ async function handleLogin() {
     showToast("Login successful.");
     window.location.href = data.role === "admin" ? "admin.html" : "main.html";
   } catch (err) {
-    const localUser = getLocalUsers().find(user => (
-      user.email.toLowerCase() === email.toLowerCase() && user.password === password
-    ));
-
-    if (!localUser) {
-      document.getElementById("loginError").textContent = "Login failed. Register a frontend demo account first.";
-      return;
+    const errorMessage = err.message || "Login failed";
+    
+    if (errorMessage.includes("Invalid email") || errorMessage.includes("Invalid password")) {
+        document.getElementById("loginError").textContent = "Incorrect email or password.";
+    } else if (errorMessage.includes("not found")) {
+        document.getElementById("loginError").textContent = "Email not registered.";
+    } else if (errorMessage.includes("network")) {
+        document.getElementById("loginError").textContent = "Network error. Please check your connection.";
+    } else {
+        document.getElementById("loginError").textContent = errorMessage;
     }
-
-    startLocalSession(localUser);
-    showToast("Login successful.");
-    window.location.href = "main.html";
   }
 }
 
