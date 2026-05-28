@@ -208,7 +208,12 @@ function scorePotentialMatch(lostItem, foundItem) {
   let score = 0;
   const reasons = [];
 
-  if (lostItem.category && lostItem.category === foundItem.category) {
+  // compare category case-insensitively
+  if (
+    lostItem.category &&
+    foundItem.category &&
+    lostItem.category.toLowerCase() === foundItem.category.toLowerCase()
+  ) {
     score += 35;
     reasons.push("same category");
   }
@@ -234,10 +239,11 @@ function scorePotentialMatch(lostItem, foundItem) {
     score -= 20;
   }
 
+  const finalScore = Math.max(0, Math.min(score, 100));
   return {
     lostItem,
     foundItem,
-    score: Math.max(0, Math.min(score, 100)),
+    score: finalScore,
     reasons
   };
 }
@@ -246,11 +252,11 @@ function getPotentialMatches(items) {
   const lostItems = items.filter(item => item.type === "Lost" && item.status !== "Returned");
   const foundItems = items.filter(item => item.type === "Found" && item.status !== "Returned");
 
-  return lostItems
-    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)))
-    .filter(match => match.score >= 45)
-    .sort((first, second) => second.score - first.score)
-    .slice(0, 6);
+  const allScores = lostItems
+    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)));
+  const filtered = allScores.filter(match => match.score >= 35);
+  const sorted = filtered.sort((first, second) => second.score - first.score);
+  return sorted;
 }
 
 function createMatchCard(match) {
@@ -268,11 +274,19 @@ function createMatchCard(match) {
           <b>Found:</b> ${escapeHtml(match.foundItem.location)} (${escapeHtml(match.foundItem.dateFound)})
         </p>
       </div>
-      <button class="btn teal waves-effect waves-light" onclick="markItemsAsMatched('${escapeHtml(match.lostItem.adminId)}', '${escapeHtml(match.foundItem.adminId)}')">
-        Match
+        <button class="btn teal waves-effect waves-light" onclick="notifyUser('${escapeHtml(match.lostItem.title)}', '${escapeHtml(match.foundItem.title)}')">
+          Notify user
       </button>
     </div>
   `;
+}
+
+function notifyUser(lostItemTitle, foundItemTitle) {
+  if (window.M) {
+    M.toast({ html: "User has been notified about this item.", classes: "teal" });
+  } else {
+    alert("User has been notified about this item.");
+  }
 }
 
 function renderPotentialMatches(items) {
@@ -393,8 +407,27 @@ function deleteLocalItem(adminId) {
   });
 
   if (nextItems.length === localItems.length) {
-    if (window.M) {
-      M.toast({ html: "Demo records cannot be deleted.", classes: "teal" });
+    // Try to delete from backend instead
+    const allItems = getAdminItems();
+    const itemToDelete = allItems.find(item => item.adminId === adminId);
+    if (itemToDelete && itemToDelete.source === "backend" && itemToDelete.id) {
+      const endpoint = itemToDelete.type === "Lost" ? "lost" : "found";
+      fetch(`${API}/${endpoint}/${itemToDelete.id}`, { method: "DELETE" })
+        .then(res => {
+          if (res.ok) {
+            loadBackendItems().then(() => renderAdminItems());
+            if (window.M) M.toast({ html: "Item deleted successfully.", classes: "teal" });
+          } else {
+            if (window.M) M.toast({ html: "Cannot delete this item.", classes: "red" });
+          }
+        })
+        .catch(() => {
+          if (window.M) M.toast({ html: "Delete failed.", classes: "red" });
+        });
+    } else {
+      if (window.M) {
+        M.toast({ html: "Cannot delete demo or unknown items.", classes: "teal" });
+      }
     }
     return;
   }

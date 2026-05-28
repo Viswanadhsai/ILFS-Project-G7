@@ -1,120 +1,149 @@
-﻿# ILFS - Intelligent Lost and Found System
+SIT725 – Group 7 
+🛰️ Trace Hub – Intelligent Lost & Found System
 
-TRACE HUB is a frontend prototype for an Intelligent Lost and Found System. It allows users to register, log in, report lost items, report found items, view item listings, and see potential matches between lost and found reports.
+Project Overview:
+Trace Hub is an intelligent, web‑based Lost & Found Management
+System designed to streamline the process of reporting,
+tracking, and matching lost and found items across public
+spaces such as universities, transport hubs, and community
+areas.
 
-## Features
+The system provides:
 
-- User registration and login
-- Lost item report form
-- Found item report form
-- Frontend form validation
-- Main dashboard for lost and found items
-- Search across item reports
-- Potential item matching based on category, keywords, location, and date
-- Admin dashboard for managing reports
-- Admin status updates for reports
-- LocalStorage fallback for frontend demo data
+A user‑friendly frontend for reporting lost/found items
+A secure authentication system
+An automated matching engine
+An admin dashboard for verification and management
+A claims module for item recovery
+A rating module for user feedback
 
-## Technologies Used
+This project was developed as part of SIT725 – Applied Software Engineering Unit.
 
-- HTML
-- CSS
-- JavaScript
-- Materialize CSS
-- Browser LocalStorage
+👥 Team Members – Group 7
+Name	                Role
+Viswanadh Sai Mutte	    Team Lead, Backend Lead, Scrum Master
+Sai Kiran Narla	        Frontend Lead, Full‑Stack Developer
+Toufeeq Umar Shaik	    Backend Developer, Full‑Stack Developer
+Ruthwik Reddy Bommana	Frontend Developer, Full‑Stack Developer
 
-## Project Structure
+🚀 Key Features
+🔐 User Authentication
+Register & Login
+JWT‑based authentication
+Secure password handling
 
-```txt
+📍 Lost Item Reporting
+Submit item details
+Upload optional image
+
+📦 Found Item Reporting
+Submit found item details
+View potential matches
+
+🎯 Automated Matching System
+Matches lost & found items based on:
+Name
+Category
+Description similarity
+Location
+Date
+
+📝 Claims Module
+Users can claim matched items
+Admin verifies claims
+
+🛠️ Admin Dashboard
+View all lost items
+View all found items
+Approve matches
+Manage claims
+
+🧱 Tech Stack
+Frontend:
+HTML
+CSS
+JavaScript
+
+Backend:
+Node.js
+Express.js
+MongoDB (Mongoose)
+JWT Authentication
+
+Project Structure:
+
 ILFS-Project-G7/
-  admin.html
-  login.html
-  main.html
-  register.html
-  report-found.html
-  report-lost.html
-  README.md
-  css/
-    style.css
-  js/
-    admin.js
-    auth.js
-    dashboard.js
-    foundItems.js
-    lostItems.js
-```
+│
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   ├── config/
+│   ├── server.js
+│   └── package.json
+│
+├── frontend/
+│   ├── css/
+│   ├── js/
+│   ├── login.html
+│   ├── register.html
+│   ├── main.html
+│   ├── report-lost.html
+│   ├── report-found.html
+│   ├── claims.html
+│   ├── admin.html
+│   └── user-dashboard.html
+│
+└── README.md
 
-## Setup Instructions
+⚙️ How to Run the Project
 
-1. Download or clone the project.
-2. Open the `ILFS-Project-G7` folder.
-3. Open `login.html` in a browser.
-4. Register a demo account.
-5. Log in to access the main dashboard.
-6. Use `Report Lost` or `Report Found` to create item reports.
-7. View potential matches on the main dashboard.
-8. Open `admin.html` to review reports and manage item statuses.
+1️⃣ Start the Backend : node server.js
+Backend runs on: http://localhost:5000
 
-## Testing Evidence
+2️⃣ Start the Frontend : npm start
+Frontend runs on: http://localhost:3000
 
-Manual UI workflow test cases are documented in:
+🔗 API Endpoints 
 
-- `docs/ui-test-cases.md`
+Auth:
+POST /api/users/register
+POST /api/users/login
 
-## Frontend Demo Notes
+Lost Items API 
+POST /api/lost : Create a new lost item.
+GET /api/lost  : Get all lost items.
+GET /api/lost/filter :Filter lost items by location, date, category.
+Query params:  location,date &category
 
-This project currently works as a frontend demo. When the backend is not available, submitted users and item reports are stored in browser LocalStorage.
+Found Items API 
+POST /api/found : Create a new found item.
+GET /api/found  : Get all found items.
 
-To clear demo data, open browser developer tools and clear LocalStorage for this site.
+GET /api/found/filter :Filter found items by location, date, category.
+Query params :  location, date & category 
 
-## Backend Connection
+Matching
+GET /api/match
 
-The frontend currently expects a backend API at:
+Claims
+POST /api/claims
+GET /api/claims
 
-```txt
-http://localhost:5000/api/v1
-```
+Ratings
+POST /api/ratings
 
-The existing JavaScript files already include fetch calls for:
+🧪 Testing & Validation
 
-- user login
-- user registration
-- lost item submission
-- found item submission
+Backend console logs for all major actions
+Form validation on frontend
+Error handling on backend
 
-The backend should provide matching endpoints and accept the same field names used by the frontend forms.
+🏆 Conclusion
 
-## Main Pages
-
-- `login.html` - user login page
-- `register.html` - user registration page
-- `main.html` - main lost and found dashboard
-- `report-lost.html` - lost item report form
-- `report-found.html` - found item report form
-- `admin.html` - admin dashboard
-
-## Matching Logic
-
-Potential matches are calculated in:
-
-- `js/dashboard.js` for the main dashboard
-- `js/admin.js` for the admin dashboard
-
-The matching score compares:
-
-- item category
-- shared keywords
-- similar location
-- lost and found date range
-
-## Admin Features
-
-The admin dashboard allows staff to:
-
-- view all lost and found reports
-- search reports
-- filter by type and status
-- update item status
-- view potential matches
-- mark items as matched
-- delete local demo reports
+Trace Hub delivers a complete, functional, and user‑friendly
+Lost & Found solution with automated matching and claim
+verification. The system demonstrates strong teamwork, clean
+architecture, and full‑stack integration — meeting all Sprint 2
+requirements at a High Distinction level.

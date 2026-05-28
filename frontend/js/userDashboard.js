@@ -76,7 +76,12 @@ function scorePotentialMatch(lostItem, foundItem) {
   let score = 0;
   const reasons = [];
 
-  if (lostItem.category && lostItem.category === foundItem.category) {
+  // compare category case-insensitively
+  if (
+    lostItem.category &&
+    foundItem.category &&
+    lostItem.category.toLowerCase() === foundItem.category.toLowerCase()
+  ) {
     score += 35;
     reasons.push("same category");
   }
@@ -101,19 +106,21 @@ function scorePotentialMatch(lostItem, foundItem) {
     score -= 20;
   }
 
+  const finalScore = Math.max(0, Math.min(score, 100));
   return {
     lostItem,
     foundItem,
-    score: Math.max(0, Math.min(score, 100)),
+    score: finalScore,
     reasons
   };
 }
 
 function getPotentialMatches(lostItems, foundItems) {
-  return lostItems
-    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)))
-    .filter(match => match.score >= 45)
-    .sort((first, second) => second.score - first.score);
+  const allScores = lostItems
+    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)));
+  const filtered = allScores.filter(match => match.score >= 35);
+  const sorted = filtered.sort((first, second) => second.score - first.score);
+  return sorted;
 }
 
 function createReportRow(item, type) {

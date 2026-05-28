@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Wallet",
+    "location": "Library",
+    "date": "2024-05-02",
+    "id": 1
+  },
+  {
+    "name": "Wallet",
+    "description": "Black leather wallet found near escalator",
+    "location": "Melbourne Central",
+    "date": "2024-05-02",
+    "id": 2
+  },
+  {
+    "name": "Charger",
+    "description": "White Lenovo charger found near food stalls",
+    "location": "Food Court",
+    "date": "2024-05-04",
+    "id": 3
+  },
+  {
+    "name": "Mobile",
+    "description": "Samsung S21 found near ticket machine",
+    "location": "Melbourne Central",
+    "date": "2024-05-04",
+    "id": 4
+  },
+  {
+    "name": "Camera",
+    "description": "Canon DSLR found near platform 2",
+    "location": "Train Station",
+    "date": "2024-05-04",
+    "id": 5
+  },
+  {
+    "name": "Laptop",
+    "description": "Dell XPS silver laptop found on study desk",
+    "location": "Library",
+    "date": "2024-05-04",
+    "id": 6
+  },
+  {
+    "name": "Eraser",
+    "description": "XYZ",
+    "location": "Deakin",
+    "date": "2025-07-09",
+    "id": 7
+  },
+  {
+    "name": "Pencil",
+    "location": "Station",
+    "date": "2025-05-07",
+    "id": 8
+  },
+  {
+    "name": "Book",
+    "location": "Pool",
+    "date": "2025-04-29",
+    "id": 9
+  },
+  {
+    "name": "Bag",
+    "location": "College",
+    "date": "2025-04-31",
+    "id": 10
+  },
+  {
+    "name": "Bottle",
+    "location": "Tram Stop",
+    "date": "2025-05-09",
+    "id": 11
+  }
+]

@@ -212,6 +212,15 @@ async function handleReportFound() {
     showToast("Found item saved successfully.");
   }
 
+  // notify other pages (dashboard) that items changed
+  try {
+    const bc = new BroadcastChannel("ilfs-items");
+    bc.postMessage({ type: "update" });
+    bc.close();
+  } catch (e) {
+    localStorage.setItem("ilfs_refresh", Date.now().toString());
+  }
+
   showSubmittedPreview(foundItem);
   resetFormFields();
 }

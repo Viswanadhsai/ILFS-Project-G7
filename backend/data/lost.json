@@ -1,0 +1,89 @@
+[
+  {
+    "name": "Wallet",
+    "location": "Library",
+    "date": "2024-05-01",
+    "id": 1
+  },
+  {
+    "name": "Wallet",
+    "description": "Black leather wallet with cards",
+    "location": "Melbourne Central",
+    "date": "2024-05-01",
+    "id": 2
+  },
+  {
+    "name": "Mobile",
+    "description": "Samsung S21 black with cracked screen",
+    "location": "Melbourne Central",
+    "date": "2024-05-03",
+    "id": 3
+  },
+  {
+    "name": "Laptop",
+    "description": "Dell XPS silver laptop with stickers",
+    "location": "Library",
+    "date": "2024-05-03",
+    "id": 4
+  },
+  {
+    "name": "Charger",
+    "description": "White Lenovo charger",
+    "location": "Food Court",
+    "date": "2024-05-03",
+    "id": 5
+  },
+  {
+    "name": "Camera",
+    "description": "Canon DSLR with strap",
+    "location": "Train Station",
+    "date": "2024-05-03",
+    "id": 6
+  },
+  {
+    "name": "Pen",
+    "description": "Cello-Montex",
+    "location": "College",
+    "date": "2024-05-05",
+    "id": 7
+  },
+  {
+    "name": "Pencil",
+    "description": "Apsara",
+    "location": "Station",
+    "date": "2024-05-05",
+    "id": 8
+  },
+  {
+    "name": "Eraser",
+    "description": "XYZ",
+    "location": "Deakin",
+    "date": "2025-07-09",
+    "id": 9
+  },
+  {
+    "name": "Book",
+    "description": "RULED BOOK",
+    "location": "Pool",
+    "date": "2025-04-28",
+    "id": 10
+  },
+  {
+    "name": "Bag",
+    "location": "College",
+    "date": "2025-04-30",
+    "id": 11
+  },
+  {
+    "name": "Pen",
+    "location": "Metro Station",
+    "date": "2025-04-24",
+    "id": 12
+  },
+  {
+    "name": "Bottle",
+    "location": "Tram Stop",
+    "date": "2025-05-08",
+    "id": 13
+  }
+]
