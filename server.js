@@ -1,35 +1,52 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db');
 require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// ===== MIDDLEWARE =====
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
+// ===== SERVE STATIC FRONTEND FILES =====
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ===== DATABASE CONNECTION =====
 connectDB();
 
-// Routes
+// ===== API ROUTES =====
 app.use('/api/lost', require('./routes/lost.routes'));
 app.use('/api/found', require('./routes/found.routes'));
 app.use('/api/matching', require('./routes/matching.routes'));
 app.use('/api/users', require('./routes/user.routes'));
 
-// Health check
+// ===== HEALTH CHECK =====
 app.get('/api/health', (req, res) => {
     res.json({ message: 'Backend is running' });
 });
 
-// Error handling
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal server error' });
+// ===== SERVE FRONTEND HTML PAGES =====
+// This handles SPA routing - if URL doesn't match API, serve index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 5000;
+// ===== ERROR HANDLING =====
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.statusCode || 500).json({ 
+        message: err.message || 'Internal server error'
+    });
+});
+
+// ===== START SERVER =====
+const PORT = process.env.PORT || 3000;  // ← CHANGED TO 3000
 app.listen(PORT, () => {
-    console.log(`✓ Server running at http://localhost:${PORT}`);
+    
+    console.log(`✓ Frontend: http://localhost:${PORT}`);
+    console.log(`✓ Backend API: http://localhost:${PORT}/api`);
+   
 });

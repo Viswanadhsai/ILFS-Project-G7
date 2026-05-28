@@ -1,6 +1,6 @@
 const LOCAL_LOST_ITEMS_KEY = "lostItems";
 const LOCAL_FOUND_ITEMS_KEY = "foundItems";
-const API = "http://localhost:5000/api";
+const API = "http://localhost:3000/api";
 
 function getCurrentUser() {
   const user = localStorage.getItem("user");

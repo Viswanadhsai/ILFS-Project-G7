@@ -1,7 +1,7 @@
 const LOCAL_LOST_ITEMS_KEY = "lostItems";
 const LOCAL_FOUND_ITEMS_KEY = "foundItems";
 const ADMIN_STATUS_KEY = "adminItemStatuses";
-const API = "http://localhost:5000/api";
+const API = "http://localhost:3000/api";  // ← UPDATED TO MATCH SERVER PORT
 let backendLostItems = [];
 let backendFoundItems = [];
 
