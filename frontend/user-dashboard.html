@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard - TRACE HUB</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="grey lighten-4">
+
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="main.html" class="brand-logo">TRACE HUB</a>
+      <ul id="nav-mobile" class="right">
+        <li><a href="main.html">Main Page</a></li>
+        <li><a href="report-lost.html">Report Lost</a></li>
+        <li><a href="report-found.html">Report Found</a></li>
+        <li><a href="claims.html">Claims</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container user-dashboard-page">
+    <section class="user-dashboard-header">
+      <div>
+        <h4 class="teal-text"><b>User Dashboard</b></h4>
+        <p class="grey-text text-darken-1">Track your reports, possible matches, and account details.</p>
+      </div>
+      <div class="main-actions">
+        <a href="report-lost.html" class="btn teal waves-effect waves-light">
+          <i class="material-icons left">add_location</i>
+          Report Lost
+        </a>
+        <a href="report-found.html" class="btn teal lighten-1 waves-effect waves-light">
+          <i class="material-icons left">inventory_2</i>
+          Report Found
+        </a>
+        <a href="claims.html" class="btn teal lighten-2 waves-effect waves-light">
+          <i class="material-icons left">assignment</i>
+          Claims
+        </a>
+      </div>
+    </section>
+
+    <section class="profile-panel">
+      <div class="profile-avatar" aria-hidden="true">
+        <i class="material-icons">account_circle</i>
+      </div>
+      <div>
+        <h5 id="userName">Demo User</h5>
+        <p class="grey-text text-darken-1" id="userEmail">No email available</p>
+        <span class="status-chip" id="userRole">user</span>
+      </div>
+    </section>
+
+    <section class="dashboard-summary">
+      <div class="admin-stat">
+        <span class="admin-stat-label">My Lost Reports</span>
+        <strong id="myLostCount">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">My Found Reports</span>
+        <strong id="myFoundCount">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">Potential Matches</span>
+        <strong id="myMatchCount">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">Open Reports</span>
+        <strong id="openReportCount">0</strong>
+      </div>
+    </section>
+
+    <section class="user-dashboard-grid">
+      <div class="user-dashboard-panel">
+        <div class="section-heading">
+          <h5><b>My Reports</b></h5>
+          <span class="grey-text text-darken-1" id="myReportTotal">0 total</span>
+        </div>
+        <div id="myReportsList"></div>
+        <div class="empty-state card z-depth-1 hide" id="reportsEmptyState">
+          <div class="card-content center-align">
+            <h6 class="teal-text"><b>No reports submitted yet</b></h6>
+            <p class="grey-text">Your lost and found reports will appear here after submission.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-dashboard-panel">
+        <div class="section-heading">
+          <h5><b>Match Updates</b></h5>
+          <span class="grey-text text-darken-1" id="matchUpdateTotal">0 found</span>
+        </div>
+        <div id="matchUpdatesList"></div>
+        <div class="empty-state card z-depth-1 hide" id="matchesEmptyState">
+          <div class="card-content center-align">
+            <h6 class="teal-text"><b>No matches yet</b></h6>
+            <p class="grey-text">Possible matches will appear when report details are similar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/userDashboard.js"></script>
+</body>
+</html>
