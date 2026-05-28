@@ -1,136 +1,321 @@
-/* navbar.css - Add this to your CSS or style.css */
+/* navbar.css - UNIVERSAL VERSION - Works with Materialize and custom CSS */
 
-/* Navbar container styling */
-.top-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  background-color: #1F1814;
-  height: 64px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ===== CRITICAL FIX ===== */
+/* Must be loaded AFTER all other CSS to override conflicting styles */
+
+* {
+  box-sizing: border-box;
 }
 
-.top-nav.dark {
-  background-color: #1F1814;
+html {
+  overflow-x: hidden;
 }
 
-/* Brand/Logo */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* ===== NAVBAR RESET ===== */
+header {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+nav.top-nav {
+  margin: 0 !important;
+  padding: 0 24px !important;
+  background-color: #1F1814 !important;
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  position: relative !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  z-index: 1000 !important;
+  flex-wrap: nowrap !important;
+  border: none !important;
+}
+
+nav.top-nav.dark {
+  background-color: #1F1814 !important;
+}
+
+/* ===== BRAND/LOGO ===== */
 .brand {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-right: 32px !important;
+  color: #FFFDF4 !important;
 }
 
 .brand a {
-  color: #FFFDF4;
-  text-decoration: none;
-  transition: color 0.3s;
+  color: #FFFDF4 !important;
+  text-decoration: none !important;
+  transition: color 0.3s !important;
+  white-space: nowrap !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .brand a:hover {
-  color: #C9A75A;
+  color: #C9A75A !important;
 }
 
-/* Nav links container */
+.brand a:visited {
+  color: #FFFDF4 !important;
+}
+
+/* ===== NAV LINKS CONTAINER ===== */
 .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  flex: 1 !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  height: 64px !important;
+  box-sizing: border-box !important;
 }
 
-/* Individual nav buttons */
-.nav-btn {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: transparent;
-  color: #FFFDF4;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.nav-btn:hover {
-  background-color: rgba(201, 167, 90, 0.1);
-  color: #C9A75A;
-  border-color: #C9A75A;
-}
-
-.nav-btn-outline {
-  border: 1px solid #FFFDF4;
-  background-color: transparent;
-}
-
-.nav-btn-outline:hover {
-  background-color: #FFFDF4;
-  color: #1F1814;
-  border-color: #FFFDF4;
-}
-
-.nav-btn-solid {
-  background-color: #C9A75A;
-  color: #1F1814;
-  border-color: #C9A75A;
-}
-
-.nav-btn-solid:hover {
-  background-color: #D4B85D;
-  border-color: #D4B85D;
-}
-
-.nav-btn-logout {
-  background-color: #B91C1C;
-  color: white;
-  border-color: #B91C1C;
-}
-
-.nav-btn-logout:hover {
-  background-color: #991B1B;
-  border-color: #991B1B;
-}
-
-/* Responsive navbar for mobile */
-@media (max-width: 768px) {
-  .top-nav {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 12px 16px;
-  }
-
-  .nav-links {
-    width: 100%;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .nav-btn {
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-
-  .brand {
-    font-size: 20px;
-  }
-}
-
-/* Alternative minimal navbar (if you prefer simpler look) */
+/* ===== NAV LINKS (TEXT STYLE) ===== */
 .nav-text-link {
-  color: #FFFDF4;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 12px;
-  transition: color 0.3s;
-  border-radius: 4px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 14px !important;
+  color: #FFFDF4 !important;
+  text-decoration: none !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+  border: none !important;
+  background-color: transparent !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  min-height: 36px !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  font-family: inherit !important;
 }
 
 .nav-text-link:hover {
-  color: #C9A75A;
-  background-color: rgba(201, 167, 90, 0.1);
+  background-color: rgba(201, 167, 90, 0.1) !important;
+  color: #C9A75A !important;
+  border-color: #C9A75A !important;
+  text-decoration: none !important;
+}
+
+.nav-text-link:visited {
+  color: #FFFDF4 !important;
+}
+
+/* ===== NAV BUTTONS (GENERIC) ===== */
+.nav-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 14px !important;
+  background-color: transparent !important;
+  color: #FFFDF4 !important;
+  text-decoration: none !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  min-height: 36px !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  font-family: inherit !important;
+}
+
+.nav-btn:hover {
+  background-color: rgba(201, 167, 90, 0.1) !important;
+  color: #C9A75A !important;
+  border-color: #C9A75A !important;
+  text-decoration: none !important;
+}
+
+/* ===== NAV BUTTON VARIANTS ===== */
+.nav-btn-outline {
+  border: 1px solid #FFFDF4 !important;
+  background-color: transparent !important;
+}
+
+.nav-btn-outline:hover {
+  background-color: #FFFDF4 !important;
+  color: #1F1814 !important;
+  border-color: #FFFDF4 !important;
+}
+
+.nav-btn-solid {
+  background-color: #C9A75A !important;
+  color: #1F1814 !important;
+  border-color: #C9A75A !important;
+  font-weight: 600 !important;
+}
+
+.nav-btn-solid:hover {
+  background-color: #D4B85D !important;
+  border-color: #D4B85D !important;
+  color: #1F1814 !important;
+}
+
+.nav-btn-logout {
+  background-color: #B91C1C !important;
+  color: white !important;
+  border-color: #B91C1C !important;
+  font-weight: 600 !important;
+}
+
+.nav-btn-logout:hover {
+  background-color: #991B1B !important;
+  border-color: #991B1B !important;
+  color: white !important;
+}
+
+/* ===== OVERRIDE MATERIALIZE CONFLICTS ===== */
+nav {
+  height: auto !important;
+}
+
+nav a {
+  color: inherit !important;
+}
+
+nav.top-nav a {
+  color: #FFFDF4 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Remove Materialize nav styling */
+nav .nav-wrapper {
+  width: 100% !important;
+}
+
+/* ===== FIX MAIN CONTENT ===== */
+main {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.container {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  nav.top-nav {
+    padding: 0 16px !important;
+  }
+
+  .brand {
+    margin-right: 16px !important;
+    font-size: 20px !important;
+  }
+
+  .brand a {
+    font-size: 20px !important;
+  }
+
+  .nav-links {
+    gap: 4px !important;
+    padding: 0 8px !important;
+  }
+
+  .nav-text-link,
+  .nav-btn {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    min-height: 32px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  nav.top-nav {
+    padding: 8px 12px !important;
+    height: auto !important;
+    flex-wrap: wrap !important;
+  }
+
+  .brand {
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 8px !important;
+    font-size: 18px !important;
+  }
+
+  .brand a {
+    font-size: 18px !important;
+  }
+
+  .nav-links {
+    width: 100% !important;
+    gap: 4px !important;
+    padding: 0 !important;
+    margin-top: 8px !important;
+  }
+
+  .nav-text-link,
+  .nav-btn {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    min-height: 32px !important;
+    flex: 1 !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  nav.top-nav {
+    padding: 8px !important;
+  }
+
+  .brand {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .brand a {
+    font-size: 16px !important;
+  }
+
+  .nav-links {
+    margin-top: 4px !important;
+    gap: 2px !important;
+  }
+
+  .nav-text-link,
+  .nav-btn {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    min-height: 28px !important;
+  }
 }

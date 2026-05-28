@@ -1,0 +1,298 @@
+/* report-items.css - Custom CSS for report-lost.html and report-found.html */
+
+/* ===== PAGE LAYOUT ===== */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #F5F0E8;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  padding: 40px 20px;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #F5F0E8;
+}
+
+.container {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* ===== CARD STYLING ===== */
+.card {
+  background-color: #FFFDF4;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E8DFD0;
+}
+
+/* ===== FORM STYLING ===== */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F1814;
+  margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #E8DFD0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: #1F1814;
+  background-color: #FFFDF4;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+textarea::placeholder {
+  color: #999;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #C9A75A;
+  box-shadow: 0 0 0 3px rgba(201, 167, 90, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ===== HEADINGS ===== */
+h5 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1F1814;
+  margin: 0 0 8px 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.card-content {
+  padding: 0;
+}
+
+.card-content h5 {
+  margin-bottom: 8px;
+}
+
+.card-content p {
+  margin: 0 0 24px 0;
+  color: #6B5D52;
+  font-size: 14px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  text-align: center;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Dark button (primary) */
+.btn-dark,
+.btn-primary {
+  background-color: #1F1814;
+  color: #FFFDF4;
+}
+
+.btn-dark:hover,
+.btn-primary:hover {
+  background-color: #2F2620;
+}
+
+/* Gold/Secondary button */
+.btn-gold,
+.btn-secondary {
+  background-color: #C9A75A;
+  color: #1F1814;
+}
+
+.btn-gold:hover,
+.btn-secondary:hover {
+  background-color: #D4B85D;
+}
+
+/* Ghost button (outline) */
+.btn-ghost,
+.btn-ghost-light {
+  background-color: transparent;
+  border: 1px solid #E8DFD0;
+  color: #1F1814;
+}
+
+.btn-ghost:hover,
+.btn-ghost-light:hover {
+  background-color: #E8DFD0;
+  color: #1F1814;
+}
+
+/* ===== FILE INPUT / PHOTO BUTTON ===== */
+.file-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.photo-button,
+.btn-photo {
+  background-color: #C9A75A;
+  color: #1F1814;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.photo-button:hover,
+.btn-photo:hover {
+  background-color: #D4B85D;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
+
+.text-muted {
+  color: #6B5D52;
+}
+
+.text-ink {
+  color: #1F1814;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ===== VALIDATION MESSAGES ===== */
+.error-message {
+  color: #B91C1C;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.success-message {
+  background-color: #ECFDF5;
+  border: 1px solid #86EFAC;
+  color: #166534;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.info-message {
+  background-color: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  color: #0C4A6E;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  main {
+    padding: 20px 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  h5 {
+    font-size: 24px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 16px 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  h5 {
+    font-size: 20px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
