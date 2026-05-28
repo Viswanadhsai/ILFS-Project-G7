@@ -1,6 +1,12 @@
 const LOCAL_LOST_KEY  = 'lostItems';
 const LOCAL_FOUND_KEY = 'foundItems';
 const ENGAGE_KEY      = 'feedEngagement';
+
+function getCurrentUser() {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+}
+const currentUser = getCurrentUser();
  
 /* ── Demo seed data (mirrors dashboard.js / admin.js) ── */
 const DEMO_LOST = [
