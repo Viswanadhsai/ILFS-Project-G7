@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = "http://localhost:3000/api";
 const LOCAL_FOUND_ITEMS_KEY = "foundItems";
 const MAX_PHOTO_SIZE_MB = 5;
 
@@ -260,20 +260,10 @@ async function handleReportFound() {
         document.getElementById("previewDescription").textContent = description;
         preview.classList.remove("hide");
 
-        // Reset form
+        // ✅ REDIRECT TO MAIN PAGE AFTER 2 SECONDS
         setTimeout(() => {
-          document.getElementById("title").value = "";
-          document.getElementById("category").value = "";
-          document.getElementById("description").value = "";
-          document.getElementById("dateFound").value = "";
-          document.getElementById("location").value = "";
-          photoInput.value = "";
-          const filePath = document.querySelector(".file-path");
-          if (filePath) filePath.value = "";
-          formSuccess.textContent = "";
-          preview.classList.add("hide");
-          if (window.M) M.updateTextFields();
-        }, 3000);
+          window.location.href = "main.html";
+        }, 2000);
 
       } catch (error) {
         formError.textContent = "Error: " + error.message;
@@ -334,20 +324,10 @@ async function handleReportFound() {
       document.getElementById("previewDescription").textContent = description;
       preview.classList.remove("hide");
 
-      // Reset form
+      // ✅ REDIRECT TO MAIN PAGE AFTER 2 SECONDS
       setTimeout(() => {
-        document.getElementById("title").value = "";
-        document.getElementById("category").value = "";
-        document.getElementById("description").value = "";
-        document.getElementById("dateFound").value = "";
-        document.getElementById("location").value = "";
-        photoInput.value = "";
-        const filePath = document.querySelector(".file-path");
-        if (filePath) filePath.value = "";
-        formSuccess.textContent = "";
-        preview.classList.add("hide");
-        if (window.M) M.updateTextFields();
-      }, 3000);
+        window.location.href = "main.html";
+      }, 2000);
 
     } catch (error) {
       formError.textContent = "Error: " + error.message;

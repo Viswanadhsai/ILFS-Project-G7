@@ -1,5 +1,6 @@
-const API = "http://localhost:5000/api";
+const API = "http://localhost:3000/api";
 const LOCAL_LOST_ITEMS_KEY = "lostItems";
+const MAX_PHOTO_SIZE_MB = 5;
 
 function getCurrentUser() {
   const user = localStorage.getItem("user");
@@ -65,6 +66,75 @@ function resetFormFields() {
     M.FormSelect.init(document.querySelectorAll("select"));
     M.textareaAutoResize(document.getElementById("description"));
   }
+}
+
+function validateFoundItem({ title, category, description, dateFound, location, photoFile }) {
+  let valid = true;
+
+  if (!title) {
+    document.getElementById("titleError").textContent = "Item title is required.";
+    valid = false;
+  } else if (title.length < 3) {
+    document.getElementById("titleError").textContent = "Item title must be at least 3 characters.";
+    valid = false;
+  } else if (title.length > 80) {
+    document.getElementById("titleError").textContent = "Item title must be 80 characters or less.";
+    valid = false;
+  }
+
+  if (!category) {
+    document.getElementById("categoryError").textContent = "Please select a category.";
+    valid = false;
+  }
+
+  if (!description) {
+    document.getElementById("descriptionError").textContent = "Description is required.";
+    valid = false;
+  } else if (description.length < 10) {
+    document.getElementById("descriptionError").textContent = "Description must be at least 10 characters.";
+    valid = false;
+  } else if (description.length > 500) {
+    document.getElementById("descriptionError").textContent = "Description must be 500 characters or less.";
+    valid = false;
+  }
+
+  if (!dateFound) {
+    document.getElementById("dateError").textContent = "Date found is required.";
+    valid = false;
+  } else {
+    const selectedDate = new Date(dateFound);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      document.getElementById("dateError").textContent = "Date found cannot be in the future.";
+      valid = false;
+    }
+  }
+
+  if (!location) {
+    document.getElementById("locationError").textContent = "Location is required.";
+    valid = false;
+  } else if (location.length < 3) {
+    document.getElementById("locationError").textContent = "Location must be at least 3 characters.";
+    valid = false;
+  } else if (location.length > 120) {
+    document.getElementById("locationError").textContent = "Location must be 120 characters or less.";
+    valid = false;
+  }
+
+  if (photoFile) {
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(photoFile.type)) {
+      document.getElementById("photoError").textContent = "Only JPG or PNG files are allowed.";
+      valid = false;
+    } else if (photoFile.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+      document.getElementById("photoError").textContent = `Photo must be smaller than ${MAX_PHOTO_SIZE_MB}MB.`;
+      valid = false;
+    }
+  }
+
+  return valid;
 }
 
 async function submitToBackend(item) {
@@ -190,20 +260,10 @@ async function handleReportLost() {
         document.getElementById("previewDescription").textContent = description;
         preview.classList.remove("hide");
 
-        // Reset form after 3 seconds
+        // ✅ REDIRECT TO MAIN PAGE AFTER 2 SECONDS
         setTimeout(() => {
-          document.getElementById("title").value = "";
-          document.getElementById("category").value = "";
-          document.getElementById("description").value = "";
-          document.getElementById("dateLost").value = "";
-          document.getElementById("location").value = "";
-          photoInput.value = "";
-          const filePath = document.querySelector(".file-path");
-          if (filePath) filePath.value = "";
-          formSuccess.textContent = "";
-          preview.classList.add("hide");
-          if (window.M) M.updateTextFields();
-        }, 3000);
+          window.location.href = "main.html";
+        }, 2000);
 
       } catch (error) {
         formError.textContent = "Error: " + error.message;
@@ -264,20 +324,10 @@ async function handleReportLost() {
       document.getElementById("previewDescription").textContent = description;
       preview.classList.remove("hide");
 
-      // Reset form after 3 seconds
+      // ✅ REDIRECT TO MAIN PAGE AFTER 2 SECONDS
       setTimeout(() => {
-        document.getElementById("title").value = "";
-        document.getElementById("category").value = "";
-        document.getElementById("description").value = "";
-        document.getElementById("dateLost").value = "";
-        document.getElementById("location").value = "";
-        photoInput.value = "";
-        const filePath = document.querySelector(".file-path");
-        if (filePath) filePath.value = "";
-        formSuccess.textContent = "";
-        preview.classList.add("hide");
-        if (window.M) M.updateTextFields();
-      }, 3000);
+        window.location.href = "main.html";
+      }, 2000);
 
     } catch (error) {
       formError.textContent = "Error: " + error.message;
