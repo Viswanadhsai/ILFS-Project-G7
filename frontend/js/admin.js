@@ -4,7 +4,7 @@ const ADMIN_STATUS_KEY = "adminItemStatuses";
 const API = "http://localhost:5000/api";
 let backendLostItems = [];
 let backendFoundItems = [];
-
+ 
 const demoLostItems = [
   {
     id: "demo-lost-1",
@@ -25,7 +25,7 @@ const demoLostItems = [
     status: "Lost"
   }
 ];
-
+ 
 const demoFoundItems = [
   {
     id: "demo-found-1",
@@ -46,7 +46,7 @@ const demoFoundItems = [
     status: "Found"
   }
 ];
-
+ 
 function escapeHtml(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -55,7 +55,7 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
+ 
 function getStoredArray(key) {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -63,7 +63,7 @@ function getStoredArray(key) {
     return [];
   }
 }
-
+ 
 function getStatusMap() {
   try {
     return JSON.parse(localStorage.getItem(ADMIN_STATUS_KEY) || "{}");
@@ -71,11 +71,11 @@ function getStatusMap() {
     return {};
   }
 }
-
+ 
 function setStatusMap(statusMap) {
   localStorage.setItem(ADMIN_STATUS_KEY, JSON.stringify(statusMap));
 }
-
+ 
 function mapBackendLostItem(item) {
   return {
     id: item._id,
@@ -88,7 +88,7 @@ function mapBackendLostItem(item) {
     source: "backend"
   };
 }
-
+ 
 function mapBackendFoundItem(item) {
   return {
     id: item._id,
@@ -101,19 +101,19 @@ function mapBackendFoundItem(item) {
     source: "backend"
   };
 }
-
+ 
 async function loadBackendItems() {
   try {
     const [lostResponse, foundResponse] = await Promise.all([
       fetch(`${API}/lost`),
       fetch(`${API}/found`)
     ]);
-
+ 
     if (!lostResponse.ok || !foundResponse.ok) return;
-
+ 
     const lostItems = await lostResponse.json();
     const foundItems = await foundResponse.json();
-
+ 
     backendLostItems = lostItems.map(mapBackendLostItem);
     backendFoundItems = foundItems.map(mapBackendFoundItem);
   } catch (err) {
@@ -121,7 +121,7 @@ async function loadBackendItems() {
     backendFoundItems = [];
   }
 }
-
+ 
 function createAdminId(type, item) {
   const dateValue = item.dateLost || item.dateFound || item.createdAt || "";
   const sourceId = item.id || item.title || "";
@@ -129,7 +129,7 @@ function createAdminId(type, item) {
   const safeDateValue = String(dateValue).replace(/[^a-zA-Z0-9_-]/g, "_");
   return `${type.toLowerCase()}-${safeSourceId}-${safeDateValue}`;
 }
-
+ 
 function getAdminItems() {
   const statusMap = getStatusMap();
   const lostItems = [...backendLostItems, ...getStoredArray(LOCAL_LOST_ITEMS_KEY), ...demoLostItems].map(item => ({
@@ -144,13 +144,13 @@ function getAdminItems() {
     date: item.dateFound,
     adminId: createAdminId("Found", item)
   }));
-
+ 
   return [...lostItems, ...foundItems].map(item => ({
     ...item,
     status: statusMap[item.adminId] || item.status || item.type
   }));
 }
-
+ 
 function itemMatchesFilters(item) {
   const searchTerm = document.getElementById("adminSearch").value.trim().toLowerCase();
   const typeFilter = document.getElementById("typeFilter").value;
@@ -163,22 +163,22 @@ function itemMatchesFilters(item) {
     item.status,
     item.type
   ].join(" ").toLowerCase();
-
+ 
   return searchableText.includes(searchTerm)
     && (typeFilter === "all" || item.type === typeFilter)
     && (statusFilter === "all" || item.status === statusFilter);
 }
-
+ 
 function normaliseWords(value) {
   const stopWords = ["a", "an", "and", "at", "in", "near", "of", "on", "the", "to", "with"];
-
+ 
   return String(value || "")
     .toLowerCase()
     .replace(/[^a-z0-9 ]/g, " ")
     .split(/\s+/)
     .filter(word => word.length > 2 && !stopWords.includes(word));
 }
-
+ 
 function getItemWords(item) {
   return normaliseWords([
     item.title,
@@ -187,45 +187,50 @@ function getItemWords(item) {
     item.description
   ].join(" "));
 }
-
+ 
 function countSharedWords(firstWords, secondWords) {
   const secondWordSet = new Set(secondWords);
   return new Set(firstWords.filter(word => secondWordSet.has(word))).size;
 }
-
+ 
 function getDaysBetween(firstDate, secondDate) {
   if (!firstDate || !secondDate) return null;
-
+ 
   const firstTime = new Date(firstDate).getTime();
   const secondTime = new Date(secondDate).getTime();
-
+ 
   if (Number.isNaN(firstTime) || Number.isNaN(secondTime)) return null;
-
+ 
   return Math.round((secondTime - firstTime) / (1000 * 60 * 60 * 24));
 }
-
+ 
 function scorePotentialMatch(lostItem, foundItem) {
   let score = 0;
   const reasons = [];
-
-  if (lostItem.category && lostItem.category === foundItem.category) {
+ 
+  // compare category case-insensitively
+  if (
+    lostItem.category &&
+    foundItem.category &&
+    lostItem.category.toLowerCase() === foundItem.category.toLowerCase()
+  ) {
     score += 35;
     reasons.push("same category");
   }
-
+ 
   const sharedWords = countSharedWords(getItemWords(lostItem), getItemWords(foundItem));
   if (sharedWords > 0) {
     const keywordScore = Math.min(sharedWords * 12, 36);
     score += keywordScore;
     reasons.push(`${sharedWords} shared keyword${sharedWords === 1 ? "" : "s"}`);
   }
-
+ 
   const sharedLocationWords = countSharedWords(normaliseWords(lostItem.location), normaliseWords(foundItem.location));
   if (sharedLocationWords > 0) {
     score += 18;
     reasons.push("similar location");
   }
-
+ 
   const dayGap = getDaysBetween(lostItem.dateLost, foundItem.dateFound);
   if (dayGap !== null && dayGap >= 0 && dayGap <= 14) {
     score += 11;
@@ -233,29 +238,30 @@ function scorePotentialMatch(lostItem, foundItem) {
   } else if (dayGap !== null && dayGap < 0) {
     score -= 20;
   }
-
+ 
+  const finalScore = Math.max(0, Math.min(score, 100));
   return {
     lostItem,
     foundItem,
-    score: Math.max(0, Math.min(score, 100)),
+    score: finalScore,
     reasons
   };
 }
-
+ 
 function getPotentialMatches(items) {
   const lostItems = items.filter(item => item.type === "Lost" && item.status !== "Returned");
   const foundItems = items.filter(item => item.type === "Found" && item.status !== "Returned");
-
-  return lostItems
-    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)))
-    .filter(match => match.score >= 45)
-    .sort((first, second) => second.score - first.score)
-    .slice(0, 6);
+ 
+  const allScores = lostItems
+    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)));
+  const filtered = allScores.filter(match => match.score >= 35);
+  const sorted = filtered.sort((first, second) => second.score - first.score);
+  return sorted;
 }
-
+ 
 function createMatchCard(match) {
   const reasonText = match.reasons.length ? match.reasons.join(", ") : "possible text match";
-
+ 
   return `
     <div class="admin-match-card">
       <div>
@@ -268,30 +274,38 @@ function createMatchCard(match) {
           <b>Found:</b> ${escapeHtml(match.foundItem.location)} (${escapeHtml(match.foundItem.dateFound)})
         </p>
       </div>
-      <button class="btn teal waves-effect waves-light" onclick="markItemsAsMatched('${escapeHtml(match.lostItem.adminId)}', '${escapeHtml(match.foundItem.adminId)}')">
-        Match
+        <button class="btn teal waves-effect waves-light" onclick="notifyUser('${escapeHtml(match.lostItem.title)}', '${escapeHtml(match.foundItem.title)}')">
+          Notify user
       </button>
     </div>
   `;
 }
-
+ 
+function notifyUser(lostItemTitle, foundItemTitle) {
+  if (window.M) {
+    M.toast({ html: "User has been notified about this item.", classes: "teal" });
+  } else {
+    alert("User has been notified about this item.");
+  }
+}
+ 
 function renderPotentialMatches(items) {
   const matches = getPotentialMatches(items);
   const matchList = document.getElementById("matchList");
   const emptyState = document.getElementById("matchEmptyState");
-
+ 
   document.getElementById("matchCount").textContent = `${matches.length} match${matches.length === 1 ? "" : "es"}`;
-
+ 
   if (!matches.length) {
     matchList.innerHTML = "";
     emptyState.classList.remove("hide");
     return;
   }
-
+ 
   emptyState.classList.add("hide");
   matchList.innerHTML = matches.map(createMatchCard).join("");
 }
-
+ 
 function updateStats(items, visibleItems) {
   document.getElementById("totalReports").textContent = items.length;
   document.getElementById("lostReports").textContent = items.filter(item => item.type === "Lost").length;
@@ -299,10 +313,10 @@ function updateStats(items, visibleItems) {
   document.getElementById("resolvedReports").textContent = items.filter(item => item.status === "Returned").length;
   document.getElementById("visibleReports").textContent = `${visibleItems.length} shown`;
 }
-
+ 
 function createStatusSelect(item) {
   const statuses = ["Lost", "Found", "In Review", "Matched", "Returned"];
-
+ 
   return `
     <select class="browser-default admin-status-select" onchange="updateItemStatus('${escapeHtml(item.adminId)}', this.value)">
       ${statuses.map(status => `
@@ -311,10 +325,10 @@ function createStatusSelect(item) {
     </select>
   `;
 }
-
+ 
 function createAdminRow(item) {
   const typeClass = item.type === "Lost" ? "orange darken-2" : "teal";
-
+ 
   return `
     <tr>
       <td>
@@ -337,53 +351,53 @@ function createAdminRow(item) {
     </tr>
   `;
 }
-
+ 
 function renderAdminItems() {
   const items = getAdminItems();
   const visibleItems = items.filter(itemMatchesFilters);
   const tableBody = document.getElementById("adminItemsTable");
   const emptyState = document.getElementById("adminEmptyState");
-
+ 
   updateStats(items, visibleItems);
   renderPotentialMatches(items);
-
+ 
   if (!visibleItems.length) {
     tableBody.innerHTML = "";
     emptyState.classList.remove("hide");
     return;
   }
-
+ 
   emptyState.classList.add("hide");
   tableBody.innerHTML = visibleItems.map(createAdminRow).join("");
-
+ 
   if (window.M) {
     M.Tooltip.init(document.querySelectorAll(".tooltipped"));
   }
 }
-
+ 
 function updateItemStatus(adminId, status) {
   const statusMap = getStatusMap();
   statusMap[adminId] = status;
   setStatusMap(statusMap);
   renderAdminItems();
-
+ 
   if (window.M) {
     M.toast({ html: "Report status updated.", classes: "teal" });
   }
 }
-
+ 
 function markItemsAsMatched(lostAdminId, foundAdminId) {
   const statusMap = getStatusMap();
   statusMap[lostAdminId] = "Matched";
   statusMap[foundAdminId] = "Matched";
   setStatusMap(statusMap);
   renderAdminItems();
-
+ 
   if (window.M) {
     M.toast({ html: "Items marked as matched.", classes: "teal" });
   }
 }
-
+ 
 function deleteLocalItem(adminId) {
   const localKey = adminId.startsWith("lost-") ? LOCAL_LOST_ITEMS_KEY : LOCAL_FOUND_ITEMS_KEY;
   const localItems = getStoredArray(localKey);
@@ -391,37 +405,58 @@ function deleteLocalItem(adminId) {
     const itemId = createAdminId(adminId.startsWith("lost-") ? "Lost" : "Found", item);
     return itemId !== adminId;
   });
-
+ 
   if (nextItems.length === localItems.length) {
-    if (window.M) {
-      M.toast({ html: "Demo records cannot be deleted.", classes: "teal" });
+    // Try to delete from backend instead
+    const allItems = getAdminItems();
+    const itemToDelete = allItems.find(item => item.adminId === adminId);
+    if (itemToDelete && itemToDelete.source === "backend" && itemToDelete.id) {
+      const endpoint = itemToDelete.type === "Lost" ? "lost" : "found";
+      fetch(`${API}/${endpoint}/${itemToDelete.id}`, { method: "DELETE" })
+        .then(res => {
+          if (res.ok) {
+            loadBackendItems().then(() => renderAdminItems());
+            if (window.M) M.toast({ html: "Item deleted successfully.", classes: "teal" });
+          } else {
+            if (window.M) M.toast({ html: "Cannot delete this item.", classes: "red" });
+          }
+        })
+        .catch(() => {
+          if (window.M) M.toast({ html: "Delete failed.", classes: "red" });
+        });
+    } else {
+      if (window.M) {
+        M.toast({ html: "Cannot delete demo or unknown items.", classes: "teal" });
+      }
     }
     return;
   }
-
+ 
   localStorage.setItem(localKey, JSON.stringify(nextItems));
   renderAdminItems();
-
+ 
   if (window.M) {
     M.toast({ html: "Local report deleted.", classes: "teal" });
   }
 }
-
+ 
 function resetDemoData() {
   localStorage.removeItem(ADMIN_STATUS_KEY);
   renderAdminItems();
-
+ 
   if (window.M) {
     M.toast({ html: "Admin demo statuses reset.", classes: "teal" });
   }
 }
-
+ 
 document.addEventListener("DOMContentLoaded", async () => {
   if (window.M) {
     M.FormSelect.init(document.querySelectorAll("select"));
     M.updateTextFields();
   }
-
+ 
   await loadBackendItems();
   renderAdminItems();
 });
+ 
+ 

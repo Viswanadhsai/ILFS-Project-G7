@@ -1,6 +1,6 @@
 const LOCAL_LOST_ITEMS_KEY = "lostItems";
 const LOCAL_FOUND_ITEMS_KEY = "foundItems";
-
+ 
 function escapeHtml(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -9,7 +9,7 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
+ 
 function getStoredArray(key) {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -17,7 +17,7 @@ function getStoredArray(key) {
     return [];
   }
 }
-
+ 
 function getCurrentUser() {
   try {
     return JSON.parse(localStorage.getItem("user") || "{}");
@@ -25,33 +25,33 @@ function getCurrentUser() {
     return {};
   }
 }
-
+ 
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   window.location.href = "login.html";
 }
-
+ 
 function isCurrentUsersReport(item, user) {
   if (!item.reporterEmail) return true;
   return item.reporterEmail.toLowerCase() === String(user.email || "").toLowerCase();
 }
-
+ 
 function normaliseWords(value) {
   const stopWords = ["a", "an", "and", "at", "in", "near", "of", "on", "the", "to", "with"];
-
+ 
   return String(value || "")
     .toLowerCase()
     .replace(/[^a-z0-9 ]/g, " ")
     .split(/\s+/)
     .filter(word => word.length > 2 && !stopWords.includes(word));
 }
-
+ 
 function countSharedWords(firstWords, secondWords) {
   const secondWordSet = new Set(secondWords);
   return new Set(firstWords.filter(word => secondWordSet.has(word))).size;
 }
-
+ 
 function getItemWords(item) {
   return normaliseWords([
     item.title,
@@ -60,39 +60,44 @@ function getItemWords(item) {
     item.description
   ].join(" "));
 }
-
+ 
 function getDaysBetween(firstDate, secondDate) {
   if (!firstDate || !secondDate) return null;
-
+ 
   const firstTime = new Date(firstDate).getTime();
   const secondTime = new Date(secondDate).getTime();
-
+ 
   if (Number.isNaN(firstTime) || Number.isNaN(secondTime)) return null;
-
+ 
   return Math.round((secondTime - firstTime) / (1000 * 60 * 60 * 24));
 }
-
+ 
 function scorePotentialMatch(lostItem, foundItem) {
   let score = 0;
   const reasons = [];
-
-  if (lostItem.category && lostItem.category === foundItem.category) {
+ 
+  // compare category case-insensitively
+  if (
+    lostItem.category &&
+    foundItem.category &&
+    lostItem.category.toLowerCase() === foundItem.category.toLowerCase()
+  ) {
     score += 35;
     reasons.push("same category");
   }
-
+ 
   const sharedWords = countSharedWords(getItemWords(lostItem), getItemWords(foundItem));
   if (sharedWords > 0) {
     score += Math.min(sharedWords * 12, 36);
     reasons.push(`${sharedWords} shared keyword${sharedWords === 1 ? "" : "s"}`);
   }
-
+ 
   const sharedLocationWords = countSharedWords(normaliseWords(lostItem.location), normaliseWords(foundItem.location));
   if (sharedLocationWords > 0) {
     score += 18;
     reasons.push("similar location");
   }
-
+ 
   const dayGap = getDaysBetween(lostItem.dateLost, foundItem.dateFound);
   if (dayGap !== null && dayGap >= 0 && dayGap <= 14) {
     score += 11;
@@ -100,26 +105,28 @@ function scorePotentialMatch(lostItem, foundItem) {
   } else if (dayGap !== null && dayGap < 0) {
     score -= 20;
   }
-
+ 
+  const finalScore = Math.max(0, Math.min(score, 100));
   return {
     lostItem,
     foundItem,
-    score: Math.max(0, Math.min(score, 100)),
+    score: finalScore,
     reasons
   };
 }
-
+ 
 function getPotentialMatches(lostItems, foundItems) {
-  return lostItems
-    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)))
-    .filter(match => match.score >= 45)
-    .sort((first, second) => second.score - first.score);
+  const allScores = lostItems
+    .flatMap(lostItem => foundItems.map(foundItem => scorePotentialMatch(lostItem, foundItem)));
+  const filtered = allScores.filter(match => match.score >= 35);
+  const sorted = filtered.sort((first, second) => second.score - first.score);
+  return sorted;
 }
-
+ 
 function createReportRow(item, type) {
   const dateLabel = type === "Lost" ? "Date lost" : "Date found";
   const dateValue = type === "Lost" ? item.dateLost : item.dateFound;
-
+ 
   return `
     <div class="dashboard-list-item">
       <div>
@@ -132,10 +139,10 @@ function createReportRow(item, type) {
     </div>
   `;
 }
-
+ 
 function createMatchRow(match) {
   const reasonText = match.reasons.length ? match.reasons.join(", ") : "possible item match";
-
+ 
   return `
     <div class="dashboard-list-item">
       <div>
@@ -147,13 +154,13 @@ function createMatchRow(match) {
     </div>
   `;
 }
-
+ 
 function renderProfile(user) {
   document.getElementById("userName").textContent = user.name || "Frontend Demo User";
   document.getElementById("userEmail").textContent = user.email || "No email available";
   document.getElementById("userRole").textContent = user.role || "user";
 }
-
+ 
 function renderDashboard() {
   const user = getCurrentUser();
   const lostItems = getStoredArray(LOCAL_LOST_ITEMS_KEY).filter(item => isCurrentUsersReport(item, user));
@@ -164,16 +171,16 @@ function renderDashboard() {
   ].sort((first, second) => new Date(second.item.createdAt || 0) - new Date(first.item.createdAt || 0));
   const matches = getPotentialMatches(lostItems, foundItems);
   const openReports = reports.filter(report => !["Matched", "Returned"].includes(report.item.status)).length;
-
+ 
   renderProfile(user);
-
+ 
   document.getElementById("myLostCount").textContent = lostItems.length;
   document.getElementById("myFoundCount").textContent = foundItems.length;
   document.getElementById("myMatchCount").textContent = matches.length;
   document.getElementById("openReportCount").textContent = openReports;
   document.getElementById("myReportTotal").textContent = `${reports.length} total`;
   document.getElementById("matchUpdateTotal").textContent = `${matches.length} found`;
-
+ 
   const reportsList = document.getElementById("myReportsList");
   const reportsEmptyState = document.getElementById("reportsEmptyState");
   if (!reports.length) {
@@ -183,7 +190,7 @@ function renderDashboard() {
     reportsEmptyState.classList.add("hide");
     reportsList.innerHTML = reports.map(report => createReportRow(report.item, report.type)).join("");
   }
-
+ 
   const matchUpdatesList = document.getElementById("matchUpdatesList");
   const matchesEmptyState = document.getElementById("matchesEmptyState");
   if (!matches.length) {
@@ -194,11 +201,13 @@ function renderDashboard() {
     matchUpdatesList.innerHTML = matches.slice(0, 5).map(createMatchRow).join("");
   }
 }
-
+ 
 document.addEventListener("DOMContentLoaded", () => {
   if (window.M) {
     M.updateTextFields();
   }
-
+ 
   renderDashboard();
 });
+ 
+ 
