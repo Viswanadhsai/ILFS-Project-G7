@@ -10,7 +10,8 @@ const {
     updateLostItem,
     deleteLostItem,
     getLostItemById,
-    sortLostItems
+    sortLostItems,
+    paginateLostItems
 } = require("../controllers/lost.controller");
 
 const LostItem = require("../models/lost.model");
@@ -42,8 +43,11 @@ router.get("/filter", async (req, res) => {
     }
 });
 
-// ⭐ ---------------- SORT ROUTE ----------------
+// ⭐ SORT ROUTE
 router.get("/sort/:by", sortLostItems);
+
+// ⭐ PAGINATION ROUTE
+router.get("/paginate", paginateLostItems);
 
 // ---------------- EXISTING ROUTES ----------------
 router.get("/", getLostItems);
