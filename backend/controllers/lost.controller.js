@@ -79,3 +79,19 @@ exports.getLostItemById = async (req, res) => {
         res.status(404).json({ error: "Item not found" });
     }
 };
+
+// ⭐ NEW: SORT lost items by date or name
+exports.sortLostItems = async (req, res) => {
+    try {
+        const { by } = req.params;
+
+        let sortOption = {};
+        if (by === "date") sortOption = { date: 1 };
+        if (by === "name") sortOption = { name: 1 };
+
+        const items = await LostItem.find().sort(sortOption);
+        res.json(items);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
