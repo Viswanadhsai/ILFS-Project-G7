@@ -80,7 +80,7 @@ exports.getLostItemById = async (req, res) => {
     }
 };
 
-// ⭐ NEW: SORT lost items by date or name
+// ⭐ SORT lost items by date or name
 exports.sortLostItems = async (req, res) => {
     try {
         const { by } = req.params;
@@ -91,6 +91,32 @@ exports.sortLostItems = async (req, res) => {
 
         const items = await LostItem.find().sort(sortOption);
         res.json(items);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// ⭐ PAGINATION for lost items
+exports.paginateLostItems = async (req, res) => {
+    try {
+        let { page = 1, limit = 10 } = req.query;
+
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const items = await LostItem.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        const total = await LostItem.countDocuments();
+
+        res.json({
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+            items
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
