@@ -41,9 +41,34 @@
     "id": 6
   },
   {
-    "name": "Mobile Phone",
-    "location": "Bus Stop",
-    "date": "2026-05-13",
+    "name": "Eraser",
+    "description": "XYZ",
+    "location": "Deakin",
+    "date": "2025-07-09",
     "id": 7
+  },
+  {
+    "name": "Pencil",
+    "location": "Station",
+    "date": "2025-05-07",
+    "id": 8
+  },
+  {
+    "name": "Book",
+    "location": "Pool",
+    "date": "2025-04-29",
+    "id": 9
+  },
+  {
+    "name": "Bag",
+    "location": "College",
+    "date": "2025-04-31",
+    "id": 10
+  },
+  {
+    "name": "Bottle",
+    "location": "Tram Stop",
+    "date": "2025-05-09",
+    "id": 11
   }
 ]

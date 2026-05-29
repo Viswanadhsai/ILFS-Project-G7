@@ -41,9 +41,49 @@
     "id": 6
   },
   {
-    "name": "Mobile Phone",
-    "location": "Bus Stop",
-    "date": "2026-05-13",
+    "name": "Pen",
+    "description": "Cello-Montex",
+    "location": "College",
+    "date": "2024-05-05",
     "id": 7
+  },
+  {
+    "name": "Pencil",
+    "description": "Apsara",
+    "location": "Station",
+    "date": "2024-05-05",
+    "id": 8
+  },
+  {
+    "name": "Eraser",
+    "description": "XYZ",
+    "location": "Deakin",
+    "date": "2025-07-09",
+    "id": 9
+  },
+  {
+    "name": "Book",
+    "description": "RULED BOOK",
+    "location": "Pool",
+    "date": "2025-04-28",
+    "id": 10
+  },
+  {
+    "name": "Bag",
+    "location": "College",
+    "date": "2025-04-30",
+    "id": 11
+  },
+  {
+    "name": "Pen",
+    "location": "Metro Station",
+    "date": "2025-04-24",
+    "id": 12
+  },
+  {
+    "name": "Bottle",
+    "location": "Tram Stop",
+    "date": "2025-05-08",
+    "id": 13
   }
 ]

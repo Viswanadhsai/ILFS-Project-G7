@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Main Page - TRACE HUB</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="grey lighten-4">
+
+  <nav class="teal">
+    <div class="nav-wrapper container main-nav">
+      <a href="main.html" class="brand-logo">TRACE HUB</a>
+      <ul class="right nav-actions">
+        <li>
+          <a href="#notificationsPanel" class="tooltipped" data-tooltip="Notifications" onclick="togglePanel('notificationsPanel')">
+            <i class="material-icons">notifications</i>
+          </a>
+        </li>
+        <li>
+          <a href="#chatPanel" class="tooltipped" data-tooltip="Chat" onclick="togglePanel('chatPanel')">
+            <i class="material-icons">chat</i>
+          </a>
+        </li>
+        <li>
+          <a href="user-dashboard.html" class="profile-link tooltipped" data-tooltip="User dashboard">
+            <i class="material-icons">account_circle</i>
+          </a>
+        </li>
+        <li>
+          <a href="admin.html" class="tooltipped" data-tooltip="Admin dashboard">
+            <i class="material-icons">admin_panel_settings</i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container main-page">
+    <section class="main-header">
+      <div>
+        <h4 class="teal-text"><b>Lost & Found Main Page</b></h4>
+        <p class="grey-text text-darken-1">Search, report, and track items around campus.</p>
+      </div>
+      <div class="main-actions">
+        <a href="report-lost.html" class="btn teal waves-effect waves-light">
+          Report Lost
+        </a>
+        <a href="report-found.html" class="btn teal lighten-1 waves-effect waves-light">
+          Report Found
+        </a>
+        <a href="claims.html" class="btn teal lighten-2 waves-effect waves-light">
+          Claims
+        </a>
+      </div>
+    </section>
+
+    <section class="search-section">
+      <div class="input-field search-field">
+        <i class="material-icons prefix">search</i>
+        <input type="text" id="searchInput" oninput="renderItems()" />
+        <label for="searchInput">Search lost or found items</label>
+      </div>
+    </section>
+
+    <section class="quick-panels">
+      <div class="info-panel hide" id="notificationsPanel">
+        <div class="panel-title">
+          <h6><b>Notifications</b></h6>
+          <button class="icon-button" onclick="togglePanel('notificationsPanel')" aria-label="Close notifications">
+            <i class="material-icons">close</i>
+          </button>
+        </div>
+        <p class="grey-text text-darken-2">New found item report: Blue backpack near the library.</p>
+        <p class="grey-text text-darken-2">Reminder: Check your submitted item status.</p>
+      </div>
+
+      <div class="info-panel hide" id="chatPanel">
+        <div class="panel-title">
+          <h6><b>Chat</b></h6>
+          <button class="icon-button" onclick="togglePanel('chatPanel')" aria-label="Close chat">
+            <i class="material-icons">close</i>
+          </button>
+        </div>
+        <div class="chat-message incoming">Hi, how can we help with your item?</div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Type a message" />
+          <button class="btn teal" onclick="sendChatMessage()">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block match-panel">
+      <div class="section-heading">
+        <h5><b>Potential Matches</b></h5>
+        <span class="badge teal white-text" id="potentialMatchCount">0</span>
+      </div>
+      <div class="match-list" id="potentialMatchesList"></div>
+      <div class="empty-state card z-depth-1 hide" id="matchesEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No potential matches found</b></h6>
+          <p class="grey-text">Likely matches will appear when lost and found reports share similar details.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <h5><b>Lost Items</b></h5>
+        <span class="badge teal white-text" id="lostCount">0</span>
+      </div>
+      <div class="row" id="lostItemsList"></div>
+      <div class="empty-state card z-depth-1 hide" id="lostEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No lost items found</b></h6>
+          <p class="grey-text">Lost item reports will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <h5><b>Found Items</b></h5>
+        <span class="badge teal white-text" id="foundCount">0</span>
+      </div>
+      <div class="row" id="foundItemsList"></div>
+      <div class="empty-state card z-depth-1 hide" id="foundEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No found items found</b></h6>
+          <p class="grey-text">Found item posts will appear here.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,68 +1,81 @@
 const LostItem = require("../models/lost.model");
 
-const getLostItems = async (req, res, next) => {
+// GET all lost items
+exports.getLostItems = async (req, res) => {
     try {
         const items = await LostItem.find();
         res.json(items);
-    } catch (err) { next(err); }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
-const addLostItem = async (req, res, next) => {
+// ADD lost item
+exports.addLostItem = async (req, res) => {
+    console.log("📥 LOST ITEM RECEIVED:", req.body);
+
     try {
-        const item = req.body;
-        if (!item.name || !item.location || !item.category || !item.date) {
-            return res.status(400).json({ message: "name, location, category and date required" });
-        }
-        const created = await LostItem.create(item);
-        res.status(201).json(created);
-    } catch (err) { next(err); }
+        const item = await LostItem.create(req.body);
+        res.status(201).json(item);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 };
 
-const getLostItemById = async (req, res, next) => {
+// UPDATE lost item
+exports.updateLostItem = async (req, res) => {
+    try {
+        const updated = await LostItem.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json(updated);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// DELETE lost item
+exports.deleteLostItem = async (req, res) => {
+    try {
+        await LostItem.findByIdAndDelete(req.params.id);
+        res.json({ message: "Item deleted" });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// SEARCH by name
+exports.getLostItemsByName = async (req, res) => {
+    try {
+        const { name } = req.query;
+        const items = await LostItem.find({
+            name: { $regex: name, $options: "i" }
+        });
+        res.json(items);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// FILTER by date
+exports.getLostItemsByDate = async (req, res) => {
+    try {
+        const { date } = req.params;
+        const items = await LostItem.find({ date });
+        res.json(items);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// GET by ID
+exports.getLostItemById = async (req, res) => {
     try {
         const item = await LostItem.findById(req.params.id);
-        if (!item) return res.status(404).json({ message: "Item not found" });
         res.json(item);
-    } catch (err) { next(err); }
-};
-
-const getLostItemsByDate = async (req, res, next) => {
-    try {
-        const items = await LostItem.find({ date: req.params.date });
-        if (items.length === 0)
-            return res.status(404).json({ message: "No items found for this date" });
-        res.json(items);
-    } catch (err) { next(err); }
-};
-
-const getLostItemsByName = async (req, res, next) => {
-    try {
-        const name = req.query.name;
-        const items = await LostItem.find({ name: { $regex: name, $options: "i" } });
-        if (items.length === 0)
-            return res.status(404).json({ message: "No items found with this name" });
-        res.json(items);
-    } catch (err) { next(err); }
-};
-
-const updateLostItem = async (req, res, next) => {
-    try {
-        const updated = await LostItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updated) return res.status(404).json({ message: "Lost item not found" });
-        res.json(updated);
-    } catch (err) { next(err); }
-};
-
-const deleteLostItem = async (req, res, next) => {
-    try {
-        const deleted = await LostItem.findByIdAndDelete(req.params.id);
-        if (!deleted) return res.status(404).json({ message: "Lost item not found" });
-        res.json({ message: "Lost item deleted successfully" });
-    } catch (err) { next(err); }
-};
-
-module.exports = {
-    getLostItems, addLostItem,
-    getLostItemById, getLostItemsByDate, getLostItemsByName,
-    updateLostItem, deleteLostItem
+    } catch (err) {
+        res.status(404).json({ error: "Item not found" });
+    }
 };

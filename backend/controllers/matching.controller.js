@@ -1,31 +1,33 @@
 const LostItem = require("../models/lost.model");
 const FoundItem = require("../models/found.model");
-const { computeMatchScore } = require("../services/matching.service");
 
 const matchItems = async (req, res, next) => {
+    console.log("🔍 MATCHING REQUEST RECEIVED");
+
     try {
         const lostItems = await LostItem.find();
         const foundItems = await FoundItem.find();
+
+        console.log(`📦 Lost Items: ${lostItems.length}, Found Items: ${foundItems.length}`);
 
         const matches = [];
 
         lostItems.forEach(lost => {
             foundItems.forEach(found => {
-                const score = computeMatchScore(lost, found);
-
-                // Only include if score is meaningful
-                if (score >= 3) {
+                if (
+                    lost.name.toLowerCase() === found.name.toLowerCase() &&
+                    lost.category.toLowerCase() === found.category.toLowerCase()
+                ) {
                     matches.push({
                         lostItem: lost,
                         foundItem: found,
-                        score
+                        score: 2
                     });
                 }
             });
         });
 
-        // Sort by score descending (best matches first)
-        matches.sort((a, b) => b.score - a.score);
+        console.log("🎯 MATCHES FOUND:", matches.length);
 
         res.json({
             totalMatches: matches.length,

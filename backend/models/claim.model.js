@@ -1,26 +1,15 @@
 const mongoose = require("mongoose");
 
-const ClaimSchema = new mongoose.Schema({
-    lostItem: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "LostItem",
-        required: true
-    },
-    foundItem: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "FoundItem",
-        required: true
-    },
-    claimedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ["pending", "approved", "rejected"],
-        default: "pending"
-    }
-}, { timestamps: true });
+const claimSchema = new mongoose.Schema({
+    itemTitle: { type: String, required: true },
+    category: { type: String },
+    location: { type: String },
+    matchTitle: { type: String },
+    claimantName: { type: String, required: true },
+    claimantEmail: { type: String, required: true },
+    proof: { type: String, required: true },
+    status: { type: String, default: "Pending" }, // Pending, Approved, Rejected
+    createdAt: { type: Date, default: Date.now }
+});
 
-module.exports = mongoose.model("Claim", ClaimSchema);
+module.exports = mongoose.model("Claim", claimSchema);

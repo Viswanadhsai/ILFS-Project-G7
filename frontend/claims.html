@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Claims - TRACE HUB</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="grey lighten-4">
+
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="main.html" class="brand-logo">TRACE HUB</a>
+      <ul id="nav-mobile" class="right">
+        <li><a href="main.html">Main Page</a></li>
+        <li><a href="user-dashboard.html">My Dashboard</a></li>
+        <li><a href="report-lost.html">Report Lost</a></li>
+        <li><a href="report-found.html">Report Found</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container claims-page">
+    <section class="claims-header">
+      <div>
+        <h4 class="teal-text"><b>Claims</b></h4>
+        <p class="grey-text text-darken-1">Submit proof when you believe a found item belongs to you.</p>
+      </div>
+      <a href="main.html" class="btn teal waves-effect waves-light">
+        <i class="material-icons left">search</i>
+        Browse Items
+      </a>
+    </section>
+
+    <section class="claims-grid">
+      <div class="card z-depth-1">
+        <div class="card-content">
+          <h5 class="teal-text"><b>Submit Claim</b></h5>
+
+          <div class="input-field">
+            <input type="text" id="itemTitle" />
+            <label for="itemTitle">Item being claimed</label>
+            <span class="helper-text red-text" id="itemTitleError"></span>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="category" />
+            <label for="category">Category</label>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="location" />
+            <label for="location">Found location</label>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="matchTitle" />
+            <label for="matchTitle">Related lost report</label>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="claimantName" />
+            <label for="claimantName">Your name</label>
+            <span class="helper-text red-text" id="claimantNameError"></span>
+          </div>
+
+          <div class="input-field">
+            <input type="email" id="claimantEmail" />
+            <label for="claimantEmail">Your email</label>
+            <span class="helper-text red-text" id="claimantEmailError"></span>
+          </div>
+
+          <div class="input-field">
+            <textarea id="proof" class="materialize-textarea"></textarea>
+            <label for="proof">Proof of ownership</label>
+            <span class="helper-text red-text" id="proofError"></span>
+          </div>
+
+          <span class="green-text" id="claimSuccess"></span>
+
+          <button class="btn teal waves-effect waves-light full-width mt-10" onclick="submitClaim()">
+            Submit Claim
+          </button>
+        </div>
+      </div>
+
+      <div class="claims-list-panel">
+        <div class="section-heading">
+          <h5><b>Submitted Claims</b></h5>
+          <span class="grey-text text-darken-1" id="claimCount">0 total</span>
+        </div>
+        <div id="claimsList"></div>
+        <div class="empty-state card z-depth-1 hide" id="claimsEmptyState">
+          <div class="card-content center-align">
+            <h6 class="teal-text"><b>No claims submitted</b></h6>
+            <p class="grey-text">Claim requests will appear here for the frontend demo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/claims.js"></script>
+</body>
+</html>

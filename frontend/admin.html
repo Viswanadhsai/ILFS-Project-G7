@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - TRACE HUB</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="grey lighten-4">
+
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="main.html" class="brand-logo">TRACE HUB</a>
+      <ul id="nav-mobile" class="right">
+        <li><a href="main.html">Main Page</a></li>
+        <li><a href="report-lost.html">Report Lost</a></li>
+        <li><a href="report-found.html">Report Found</a></li>
+        <li><a href="claims.html">Claims</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container admin-page">
+    <section class="admin-header">
+      <div>
+        <h4 class="teal-text"><b>Admin Dashboard</b></h4>
+        <p class="grey-text text-darken-1">Review reports, update item progress, and manage frontend demo records.</p>
+      </div>
+      <button class="btn teal waves-effect waves-light" onclick="resetDemoData()">
+        <i class="material-icons left">refresh</i>
+        Reset Demo
+      </button>
+    </section>
+
+    <section class="admin-stats">
+      <div class="admin-stat">
+        <span class="admin-stat-label">Total Reports</span>
+        <strong id="totalReports">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">Lost Items</span>
+        <strong id="lostReports">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">Found Items</span>
+        <strong id="foundReports">0</strong>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat-label">Resolved</span>
+        <strong id="resolvedReports">0</strong>
+      </div>
+    </section>
+
+    <section class="admin-controls">
+      <div class="input-field admin-search">
+        <i class="material-icons prefix">search</i>
+        <input type="text" id="adminSearch" oninput="renderAdminItems()" />
+        <label for="adminSearch">Search reports</label>
+      </div>
+
+      <div class="input-field admin-filter">
+        <select id="typeFilter" onchange="renderAdminItems()">
+          <option value="all" selected>All reports</option>
+          <option value="Lost">Lost only</option>
+          <option value="Found">Found only</option>
+        </select>
+        <label>Report type</label>
+      </div>
+
+      <div class="input-field admin-filter">
+        <select id="statusFilter" onchange="renderAdminItems()">
+          <option value="all" selected>All statuses</option>
+          <option value="Lost">Lost</option>
+          <option value="Found">Found</option>
+          <option value="In Review">In Review</option>
+          <option value="Matched">Matched</option>
+          <option value="Returned">Returned</option>
+        </select>
+        <label>Status</label>
+      </div>
+    </section>
+
+    <section class="admin-match-panel">
+      <div class="admin-table-header">
+        <h5><b>Potential Matches</b></h5>
+        <span class="grey-text text-darken-1" id="matchCount">0 matches</span>
+      </div>
+      <div class="admin-match-list" id="matchList"></div>
+      <div class="empty-state card z-depth-1 hide" id="matchEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No likely matches yet</b></h6>
+          <p class="grey-text">Matching compares category, keywords, location, and report dates.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-table-panel">
+      <div class="admin-table-header">
+        <h5><b>Item Reports</b></h5>
+        <span class="grey-text text-darken-1" id="visibleReports">0 shown</span>
+      </div>
+
+      <div class="responsive-table">
+        <table class="highlight admin-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminItemsTable"></tbody>
+        </table>
+      </div>
+
+      <div class="empty-state card z-depth-1 hide" id="adminEmptyState">
+        <div class="card-content center-align">
+          <h6 class="teal-text"><b>No reports found</b></h6>
+          <p class="grey-text">Try a different search or filter.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
