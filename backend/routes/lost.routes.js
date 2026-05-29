@@ -9,7 +9,8 @@ const {
     addLostItem,
     updateLostItem,
     deleteLostItem,
-    getLostItemById
+    getLostItemById,
+    sortLostItems
 } = require("../controllers/lost.controller");
 
 const LostItem = require("../models/lost.model");
@@ -40,6 +41,9 @@ router.get("/filter", async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 });
+
+// ⭐ ---------------- SORT ROUTE ----------------
+router.get("/sort/:by", sortLostItems);
 
 // ---------------- EXISTING ROUTES ----------------
 router.get("/", getLostItems);
