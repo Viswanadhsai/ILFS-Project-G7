@@ -118,4 +118,16 @@ exports.paginateLostItems = async (req, res) => {
             items
         });
     } catch (err) {
-        res.status
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// ⭐ COUNT total lost items
+exports.countLostItems = async (req, res) => {
+    try {
+        const total = await LostItem.countDocuments();
+        res.json({ total });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
